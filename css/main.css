@@ -1,5 +1,5 @@
 body{
-    background-color: #374a38;
+    background-color: #151515;
     padding:0;
     padding-top:15px;
     margin:0;
@@ -8,6 +8,6 @@ body{
 
 #phaser-canvas{
     margin:auto;
-    max-width:960px;
+    max-width:720px;
     border:5px black solid;
 }
