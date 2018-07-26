@@ -2,8 +2,9 @@ body{
     background-color: #151515;
     padding:0;
     padding-top:15px;
+    padding-bottom:15px;
     margin:0;
-    overflow:hidden;
+    overflow:scroll;
 }
 
 #phaser-canvas{
