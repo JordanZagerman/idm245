@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Infection || Intro</title>
+  <!--Add Phaser Framework library-->
+  <script src="phaser.min.js"></script>
+  <!--Add custom stylesheet-->
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+  <div id="phaser-canvas"></div>
+  <!--Custom Javascript-->
+  <script type="text/javascript">
+    window.onload = function () {
+
+      var game = new Phaser.Game(960, 720, Phaser.AUTO, 'phaser-canvas', {
+        preload: preload,
+        create: create
+      });
+
+      // Images must be preloaded
+      function preload() {
+
+        // game.load.image('background', 'img/background.png');
+        // game.load.image('marker', 'img/marker.png');
+        // Images is 540 pixels wide divided up into 180 pixel wide chunks
+        game.load.spritesheet('playButton', 'img/play_button.png', 180, 90);
+
+      }
+
+      // Text doesn't need to be preloaded
+      function create() {
+        game.stage.backgroundColor = "#680000";
+
+        //game.world.centerX/Y is an equation that automatically does the anchor point centering equations
+        var spMarker = game.add.sprite(game.world.centerX, game.world.centerY, 'marker');
+        // top left is 0,0 bottom right is 1,1
+        spMarker.anchor.setTo(0.5, 0.5);
+
+        var scoreNum = 1200;
+
+        // Text Style
+        var generalStyle = {
+          width: '150px',
+          font: '35px Arial',
+          fill: 'black',
+          allign: 'left'
+        };
+
+        var textScore = game.add.text(25, 15, scoreNum, generalStyle);
+
+        // Add button
+        // The number given are the indexes of the frames in this order: OVER, OUT, DOWN
+        // bt short for button
+        var btPlay = game.add.button(25, 150, 'playButton', actionOnClick, this, 1, 0, 2);
+      } // end of create function
+
+      function actionOnClick () {
+        alert('Play button clicked');
+      }
+
+    } // end onload function
+  </script>
+</body>
+
+</html>
