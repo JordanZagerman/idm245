@@ -7,13 +7,38 @@ window.onload = function () {
 
   // Images must be preloaded
   function preload() {
-    game.load.image('background', '../img/0_score.png');
     this.game.load.bitmapFont('Krungthep', 'assets/font/font.png', 'assets/font/font.fnt');
+    game.load.image('yellow_spike', '../img/yellow_spike.png');
+    game.load.image('orange_spike', '../img/orange_spike.png');
+    game.load.image('block', '../img/block.png');
+    game.load.image('single_character', '../img/single_character.png');
+
   }
 
   // Text doesn't need to be preloaded
   function create() {
     game.stage.backgroundColor = "#680000";
+
+        //game.world.centerX/Y is an equation that automatically does the anchor point centering equations
+        var yellow_spike = game.add.sprite(game.world.centerX, 200, 'yellow_spike');
+        // top left is 0,0 bottom right is 1,1
+        yellow_spike.anchor.setTo(0.5, 0.5);
+
+        var orange_spike = game.add.sprite(game.world.centerX+200, 400, 'orange_spike');
+        // top left is 0,0 bottom right is 1,1
+        orange_spike.anchor.setTo(0.5, 0.5);
+
+        var orange_spike = game.add.sprite(game.world.centerX+200, 400, 'orange_spike');
+        // top left is 0,0 bottom right is 1,1
+        orange_spike.anchor.setTo(0.5, 0.5);
+
+        var block = game.add.sprite(game.world.centerX-300, 400, 'block');
+        // top left is 0,0 bottom right is 1,1
+        orange_spike.anchor.setTo(0.5, 0.5);
+
+        var single_character = game.add.sprite(game.world.centerX+30, (960-178), 'single_character');
+        // top left is 0,0 bottom right is 1,1
+        orange_spike.anchor.setTo(0.5, 0.5);
 
     //game.world.centerX/Y is an equation that automatically does the anchor point centering equations
     var scoreNum = 0;
