@@ -7,6 +7,8 @@ window.onload = function () {
 
   // Images must be preloaded
   function preload() {
+    this.game.load.bitmapFont('Krungthep', 'assets/font/font.png', 'assets/font/font.fnt');
+
     // game.load.image('background', '../img/lose_background.png');
     game.load.image('dead_character_1', '../img/dead_character_1.png');
     game.load.image('dead_character_2', '../img/dead_character_2.png');
@@ -16,8 +18,6 @@ window.onload = function () {
 
   // Text doesn't need to be preloaded
   function create() {
-
-
     // // backgrounds
 
     // var spBackground = game.add.sprite(0, 0, 'background');
