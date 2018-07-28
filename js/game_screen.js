@@ -161,8 +161,8 @@ window.onload = function () {
   } // end of create function
 
 
-  function actionOnClick() {
-    alert('Play button clicked');
-  }
+  // function actionOnClick() {
+  //   // alert('Play button clicked');
+  // }
 
 } // end onload function

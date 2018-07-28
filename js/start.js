@@ -7,11 +7,11 @@ window.onload = function () {
 
     // Images must be preloaded
     function preload() {
-      game.load.image('background', 'img/start_background.png');
-      game.load.image('marker', 'img/marker.png');
+      game.load.image('background', '../img/start_background.png');
+      game.load.image('marker', '../img/marker.png');
       // Images is 1089 pixels wide divided up into 363 pixel wide chunks
-      game.load.spritesheet('playButton', 'img/proceed_button.png', 363, 120);
-      game.load.spritesheet('helpButton', 'img/help_button.png', 177, 100);
+      game.load.spritesheet('playButton', '../img/proceed_button.png', 363, 120);
+      game.load.spritesheet('helpButton', '../img/help_button.png', 177, 100);
       
     }
 
@@ -36,7 +36,7 @@ window.onload = function () {
 
     function actionOnClick () {
       // alert('Play button clicked');
-      open("pages/win.html");
+      // open("pages/win.html");
     }
 
   } // end onload function

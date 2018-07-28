@@ -1,14 +1,28 @@
-body{
+body {
     background-color: #151515;
-    padding:0;
-    padding-top:15px;
-    padding-bottom:15px;
-    margin:0;
-    overflow:scroll;
+    padding: 0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin: 0;
+    overflow: scroll;
 }
 
-#phaser-canvas{
-    margin:auto;
-    max-width:720px;
-    border:5px black solid;
+#phaser-canvas {
+    margin: auto;
+    max-width: 720px;
+    border: 5px black solid;
+}
+
+.index-links {
+    border-width: 1px;
+    display: flex;
+    font-size: 50px;
+    color: white;
+    padding: 10px 10px 10px 10px;
+}
+
+.index-container {
+    border-width: 1px;
+    max-width: 400px;
+    margin: 0 auto;
 }
