@@ -1,24 +1,53 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <title>So Help Me God</title>
-  <!--Add Phaser Framework library-->
-  <script src="js/phaser.min.js"></script>
-  <!-- <script src="js/start.js"></script> -->
   <!--Add custom stylesheet-->
   <link rel="stylesheet" href="css/main.css">
+  <!--Add Phaser Framework library-->
+  <script src="js/phaser.min.js"></script>
+
+  <!-- link to the boot -->
+  <script src="js/Boot.js"></script>
+  <!-- link to the preloader -->
+  <script src="js/Preloader.js"></script>
+  <script src="js/Start.js"></script>
+  <script src="js/Play.js"></script>
+  <script src="js/Help.js"></script>
+  <script src="js/Win.js"></script>
+  <script src="js/Lose.js"></script>
 </head>
 
 <body>
-  <div class="index-container">
-  <a class="index-links" href='pages/start.html'>Start</a>
-  <a class="index-links" href='pages/help.html'>Help</a>
-  <a class="index-links" href='pages/game_screen.html'>Game Screen</a>
-  <a class="index-links" href='pages/win.html'>Win</a>
-  <a class="index-links" href='pages/lose.html'>Lose</a>
-</div>
+  <div id="phaser-canvas"></div>
+  <script type="text/javascript">
+    window.onload = function () {
+      console.log('windows loaded');
+
+      var game = new Phaser.Game(720, 960, Phaser.AUTO, 'phaser-canvas');
+
+      // loads boot.js
+      game.state.add('Boot', gameObj.Boot);
+
+      // loads Preloader.js
+      game.state.add('Preloader', gameObj.Preloader);
+
+      // execute that code
+      game.state.start('Boot');
+
+      // Links 
+      game.state.add('Start', gameObj.Start);
+
+      // Play 
+      game.state.add('Play', gameObj.Play);
+
+      // Play 
+      game.state.add('Help', gameObj.Help);
+
+    }; // windows.onload
+  </script>
 </body>
 
 </html>
