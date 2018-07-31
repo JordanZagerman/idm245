@@ -3,6 +3,7 @@ gameObj.Play = function (game) {};
 gameObj.Play.prototype = {
     create: function () {
         console.log('State - Play');
+        this.stage.backgroundColor = '#680000';
 
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
         var yellow_spike = this.add.sprite(this.world.centerX, 200, 'yellow_spike');
@@ -140,12 +141,20 @@ gameObj.Play.prototype = {
         // textTimerColon.strokeThickness = 6;
         textTimerColon.fill = '#FFFFFF';
 
+        //The numbers given in parameters are the indexes of the frames, in this order: OVER, OUT, DOWN
+        var btWin = this.add.button(10, 600, 'winButton', this.winnerFun, this, 1, 0, 2);
+        var btLose = this.add.button(110, 600, 'loseButton', this.loserFun, this, 1, 0, 2);
+
     },
     winnerFun: function () {
         console.log('WINNER');
+        // jump to Win
+        this.state.start('Win');
     },
 
     loserFun: function () {
         console.log('LOSER!');
+        // jump to Lose
+        this.state.start('Lose');
     }
 };

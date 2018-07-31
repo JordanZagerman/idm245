@@ -12,7 +12,7 @@ gameObj.Help.prototype = {
         // Add button
         // The number given are the indexes of the frames in this order: OVER, OUT, DOWN
         // bt short for button
-        var btPlay = this.add.button(this.world.centerX + 1, this.world.centerY + 382, 'playButton', this.helpButtonClicked, this, 1, 0, 2);
+        var btPlay = this.add.button(this.world.centerX + 1, this.world.centerY + 382, 'playButton', this.playButtonClicked, this, 1, 0, 2);
         btPlay.anchor.setTo(0.5, 0.5);
 
         // Text Starting at the top
@@ -88,7 +88,8 @@ gameObj.Help.prototype = {
         line_8.fill = '#FFFFFF';
 
   },
-  customFunName: function () {
-    
-  }
+  playButtonClicked: function () {
+    console.log('play button clicked');
+    this.state.start('Play');
+    }
 };

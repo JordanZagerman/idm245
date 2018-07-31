@@ -5,6 +5,8 @@ var gameObj = {
     // apparently because it boots up the game
     // want to load the bare minimum
     // built in preloader for background and bar
+    // HAS THE LOADING BAR
+    // boots up
   
   
     gScore: 3770,

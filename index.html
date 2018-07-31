@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="css/main.css">
   <!--Add Phaser Framework library-->
   <script src="js/phaser.min.js"></script>
-
   <!-- link to the boot -->
   <script src="js/Boot.js"></script>
   <!-- link to the preloader -->
   <script src="js/Preloader.js"></script>
+  <!-- Links to all of the pages you see/use for an extended period of time -->
   <script src="js/Start.js"></script>
   <script src="js/Play.js"></script>
   <script src="js/Help.js"></script>
@@ -37,14 +37,20 @@
       // execute that code
       game.state.start('Boot');
 
-      // Links 
+      // Start State 
       game.state.add('Start', gameObj.Start);
 
-      // Play 
+      // Play State
       game.state.add('Play', gameObj.Play);
 
-      // Play 
+      // Help State
       game.state.add('Help', gameObj.Help);
+
+      // Win State
+      game.state.add('Win', gameObj.Win);
+
+      // Lose State
+      game.state.add('Lose', gameObj.Lose);
 
     }; // windows.onload
   </script>
