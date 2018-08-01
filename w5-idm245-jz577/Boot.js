@@ -7,8 +7,8 @@ var gameObj = {
   // built in preloader for background and bar
 
 
-  gScore: 3770,
-  gTime: "00:00"
+//  gScore: 3770,
+//  gTime: "00:00"
 };
 
 gameObj.Boot = function (game) {};
@@ -19,8 +19,9 @@ gameObj.Boot.prototype = {
     console.log("State - Boot");
 
     // wherever you see game. replace it with this.
-
-    this.load.image('preloaderBg', 'img/loading-bg.png');
+    
+    //In case I decide to add a backround image for the load screen
+    //this.load.image('preloaderBg', 'img/loading-bg.png');
     this.load.image('preloaderBar', 'img/loading-bar.png');
 
 

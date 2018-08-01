@@ -9,8 +9,8 @@ var gameObj = {
     // boots up
   
   
-    gScore: 3770,
-    gTime: "00:00"
+//    gScore: 3770,
+//    gTime: "00:00"
   };
   
   gameObj.Boot = function (game) {};
@@ -22,7 +22,7 @@ var gameObj = {
   
       // wherever you see game. replace it with this.
   
-      this.load.image('preloaderBg', 'img/loading-bg.png');
+//      this.load.image('preloaderBg', 'img/loading-bg.png');
       this.load.image('preloaderBar', 'img/loading-bar.png');
   
   

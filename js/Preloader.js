@@ -53,7 +53,7 @@ gameObj.Preloader.prototype = {
         this.load.spritesheet('losePlayAgainButton', 'img/lose_play_again_button.png', 437, 120);
 
 
-        this.preloadBG = this.add.sprite((820 - 297) / 2, (700 - 145) / 2, 'preloaderBg');
+//        this.preloadBG = this.add.sprite((820 - 297) / 2, (700 - 145) / 2, 'preloaderBg');
         // bar width 158
         // bar height 50
         this.preloadBar = this.add.sprite((820 - 158) / 2, (700 - 50) / 2, 'preloaderBar');
