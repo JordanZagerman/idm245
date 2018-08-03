@@ -51,6 +51,15 @@ gameObj.Win.prototype = {
 
         // Score and Time
 
+        //Global Score
+        var scoreStr = gameObj.gScore;
+
+        // Global Time
+        var timeStr = gameObj.gTime;
+
+        // var txScore = this.add.text(25, 15, scoreStr);
+        // var txTime = this.add.text(this.world.width - 115, 15, timeStr);
+
         // Score
 
         var score_title = this.add.text(122, 392, 'Score:');
@@ -62,7 +71,7 @@ gameObj.Win.prototype = {
         // make this variable changable later
         var final_score = 9632;
 
-        var score_number = this.add.text(406, 392, final_score);
+        var score_number = this.add.text(406, 392, scoreStr);
         score_number.align = 'center';
         score_number.font = 'KrungThep';
         score_number.fontSize = 72;
@@ -78,11 +87,11 @@ gameObj.Win.prototype = {
 
         var final_time = "00:00";
 
-        var score_number = this.add.text(375, 532, final_time);
-        score_number.align = 'center';
-        score_number.font = 'KrungThep';
-        score_number.fontSize = 72;
-        score_number.fill = '#F8E71C';
+        var time_number = this.add.text(375, 532, final_time);
+        time_number.align = 'center';
+        time_number.font = 'KrungThep';
+        time_number.fontSize = 72;
+        time_number.fill = '#F8E71C';
 
         // Add button
         // The number given are the indexes of the frames in this order: OVER, OUT, DOWN

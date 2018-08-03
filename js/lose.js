@@ -40,6 +40,15 @@ gameObj.Lose.prototype = {
 
         // Score and Time
 
+            //Global Score
+    var scoreStr = gameObj.gScore;
+
+    // Global Time
+    var timeStr = gameObj.gTime;
+
+    // var txScore = this.add.text(25, 15, scoreStr);
+    // var txTime = this.add.text(this.world.width - 115, 15, timeStr);
+
         // Score
 
         var score_title = this.add.text(115, 364, 'Score:');
@@ -51,7 +60,7 @@ gameObj.Lose.prototype = {
         // make this variable changable later
         var final_lose_score = 342;
 
-        var score_number = this.add.text(435, 364, final_lose_score);
+        var score_number = this.add.text(435, 364, scoreStr);
         score_number.align = 'center';
         score_number.font = 'KrungThep';
         score_number.fontSize = 72;
@@ -65,9 +74,9 @@ gameObj.Lose.prototype = {
         time_title.fontSize = 72;
         time_title.fill = '#000000';
 
-        var final_time = "2:34";
+        var final_time = "02:34";
 
-        var score_number = this.add.text(435, 504, final_time);
+        var score_number = this.add.text(375, 504, final_time);
         score_number.align = 'center';
         score_number.font = 'KrungThep';
         score_number.fontSize = 72;

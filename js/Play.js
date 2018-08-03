@@ -1,4 +1,8 @@
-gameObj.Play = function (game) {};
+gameObj.Play = function (game) {
+
+    var txScore;
+    var scoreX;
+};
 
 gameObj.Play.prototype = {
     create: function () {
@@ -37,21 +41,24 @@ gameObj.Play.prototype = {
             // allign: 'left'
         }
 
-        var textScore = this.add.text(39, 40, scoreNum);
+        // txScore = this.add.text(39, 40, scoreNum);
+        // test length
+
+        scoreX = 15;
+        txScore = this.add.text(scoreX, -5, scoreNum);
 
         //	Center align
-        textScore.anchor.set(0.5);
-        textScore.align = 'center';
+        txScore.align = 'left';
 
         //	Font style
-        textScore.font = 'KrungThep';
-        textScore.fontSize = 72;
-        // textScore.fontWeight = 'bold';
+        txScore.font = 'KrungThep';
+        txScore.fontSize = 72;
+        // txScore.fontWeight = 'bold';
 
         // //	Stroke color and thickness
-        // textScore.stroke = '#FFFFFF';
-        // textScore.strokeThickness = 6;
-        textScore.fill = '#FFFFFF';
+        // txScore.stroke = '#FFFFFF';
+        // txScore.strokeThickness = 6;
+        txScore.fill = '#FFFFFF';
 
         // TIMER SECTION
 
@@ -145,6 +152,14 @@ gameObj.Play.prototype = {
         var btWin = this.add.button(10, 600, 'winButton', this.winnerFun, this, 1, 0, 2);
         var btLose = this.add.button(110, 600, 'loseButton', this.loserFun, this, 1, 0, 2);
 
+        // points button
+
+        var btPoints = this.add.button(210, 600, 'pointsButton', this.pointsFun, this, 1, 0, 2);
+
+        // resets score back to 12000
+        gameObj.gScore = 0;
+        gameObj.gTime = 70;
+
     },
     winnerFun: function () {
         console.log('WINNER');
@@ -156,5 +171,19 @@ gameObj.Play.prototype = {
         console.log('LOSER!');
         // jump to Lose
         this.state.start('Lose');
+    },
+    pointsFun: function () {
+        console.log('pointsFun called');
+        //  must put gameObj. when declaring a global variable
+        gameObj.gScore = gameObj.gScore + 10;
+
+        // if (gameObj.gScore >= 10) {
+        //     console.log('score greater than 10');
+        //     scoreX = scoreX + 10;
+        //   } else if (gameObj.gScore >= 100) {
+        //     console.log('score greater than 100');
+        //     scoreX = scoreX + 10;
+        //   }
+        txScore.text = gameObj.gScore;
     }
 };
