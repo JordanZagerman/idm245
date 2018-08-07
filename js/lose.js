@@ -40,25 +40,18 @@ gameObj.Lose.prototype = {
 
         // Score and Time
 
-            //Global Score
-    var scoreStr = gameObj.gScore;
 
-    // Global Time
-    var timeStr = gameObj.gTime;
-
-    // var txScore = this.add.text(25, 15, scoreStr);
-    // var txTime = this.add.text(this.world.width - 115, 15, timeStr);
 
         // Score
+
+        //Global Score
+        var scoreStr = gameObj.gScore;
 
         var score_title = this.add.text(115, 364, 'Score:');
         score_title.align = 'center';
         score_title.font = 'KrungThep';
         score_title.fontSize = 72;
         score_title.fill = '#000000';
-
-        // make this variable changable later
-        var final_lose_score = 342;
 
         var score_number = this.add.text(435, 364, scoreStr);
         score_number.align = 'center';
@@ -67,6 +60,7 @@ gameObj.Lose.prototype = {
         score_number.fill = '#000000';
 
         // Time
+        var timeStr = gameObj.gTime;
 
         var time_title = this.add.text(115, 504, 'Time:');
         time_title.align = 'center';
@@ -74,19 +68,16 @@ gameObj.Lose.prototype = {
         time_title.fontSize = 72;
         time_title.fill = '#000000';
 
-        var final_time = "02:34";
-
-        var score_number = this.add.text(375, 504, final_time);
-        score_number.align = 'center';
-        score_number.font = 'KrungThep';
-        score_number.fontSize = 72;
-        score_number.fill = '#000000';
+        var txTime = this.add.text(375, 504, timeStr);
+        txTime.align = 'center';
+        txTime.font = 'KrungThep';
+        txTime.fontSize = 72;
+        txTime.fill = '#000000';
         // Add button
         // The number given are the indexes of the frames in this order: OVER, OUT, DOWN
         // bt short for button
         var btPlay = this.add.button(this.world.centerX, this.world.centerY + 380, 'losePlayAgainButton', this.losePlayAgainOnClick, this, 1, 0, 2);
         btPlay.anchor.setTo(0.5, 0.5);
-
     },
     losePlayAgainOnClick: function () {
         console.log('play again lose screen button clicked');

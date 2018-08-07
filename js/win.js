@@ -54,8 +54,7 @@ gameObj.Win.prototype = {
         //Global Score
         var scoreStr = gameObj.gScore;
 
-        // Global Time
-        var timeStr = gameObj.gTime;
+
 
         // var txScore = this.add.text(25, 15, scoreStr);
         // var txTime = this.add.text(this.world.width - 115, 15, timeStr);
@@ -79,15 +78,16 @@ gameObj.Win.prototype = {
 
         // Time
 
+        // Global Time
+        var timeStr = gameObj.gTime;
+
         var time_title = this.add.text(162, 532, 'Time:');
         time_title.align = 'center';
         time_title.font = 'KrungThep';
         time_title.fontSize = 72;
         time_title.fill = '#F8E71C';
 
-        var final_time = "00:00";
-
-        var time_number = this.add.text(375, 532, final_time);
+        var time_number = this.add.text(375, 532, timeStr);
         time_number.align = 'center';
         time_number.font = 'KrungThep';
         time_number.fontSize = 72;
