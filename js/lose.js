@@ -53,8 +53,8 @@ gameObj.Lose.prototype = {
         score_title.fontSize = 72;
         score_title.fill = '#000000';
 
-        var score_number = this.add.text(435, 364, scoreStr);
-        score_number.align = 'center';
+        var score_number = this.add.text(375, 367, scoreStr);
+        score_number.align = 'right';
         score_number.font = 'KrungThep';
         score_number.fontSize = 72;
         score_number.fill = '#000000';
@@ -68,7 +68,7 @@ gameObj.Lose.prototype = {
         time_title.fontSize = 72;
         time_title.fill = '#000000';
 
-        var txTime = this.add.text(375, 504, timeStr);
+        var txTime = this.add.text(375, 507, timeStr);
         txTime.align = 'center';
         txTime.font = 'KrungThep';
         txTime.fontSize = 72;
