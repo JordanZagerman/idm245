@@ -70,8 +70,8 @@ gameObj.Win.prototype = {
         // make this variable changable later
         var final_score = 9632;
 
-        var score_number = this.add.text(406, 392, scoreStr);
-        score_number.align = 'center';
+        var score_number = this.add.text(375, 392, scoreStr);
+        score_number.align = 'right';
         score_number.font = 'KrungThep';
         score_number.fontSize = 72;
         score_number.fill = '#F8E71C';

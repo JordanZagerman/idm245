@@ -9,6 +9,15 @@ gameObj.Play = function (game) {
 
     var timerObj; //timer Object
     var timerSeconds; // Current countdown timer
+
+    var txDice; // Display text dice rolled
+    var single_character;
+    var speedNum = 4;
+    // how many pixels per instance
+    var pongObj;
+    // button sound effect
+    var soundsLoadedFlag;
+    // all sounds loaded flag
 };
 
 gameObj.Play.prototype = {
@@ -33,7 +42,7 @@ gameObj.Play.prototype = {
         // top left is 0,0 bottom right is 1,1
         orange_spike.anchor.setTo(0.5, 0.5);
 
-        var single_character = this.add.sprite(this.world.centerX + 30, (960 - 178), 'single_character');
+        single_character = this.add.sprite(this.world.centerX + 30, (960 - 178), 'single_character');
         // top left is 0,0 bottom right is 1,1
         orange_spike.anchor.setTo(0.5, 0.5);
 
@@ -53,73 +62,23 @@ gameObj.Play.prototype = {
         // Stroke color and thickness
         txScore.fill = '#FFFFFF';
 
-        // TIMER TIMER TIMER TIMER TIMER TIMER TIMER TIMER TIMER TIMER TIMER TIMER 
-
-        // Minutes Minutes Minutes Minutes Minutes Minutes Minutes 
-
-        // var timerNumMinutes = '00';
-
-        // var textTimerMinutes = this.add.text(548, 40, timerNumMinutes);
-
-        // //	Center align
-        // textTimerMinutes.anchor.set(0.5);
-        // textTimerMinutes.align = 'center';
-
-        // //	Font style
-        // textTimerMinutes.font = 'KrungThep';
-        // textTimerMinutes.fontSize = 72;
-
-        // // Stroke color and thickness
-        // textTimerMinutes.fill = '#FFFFFF';
-
-        // // Seconds Seconds Seconds Seconds Seconds Seconds Seconds Seconds 
-
-        // var timerNumSeconds = '00';
-        // var textTimerSeconds = this.add.text(668, 40, timerNumSeconds);
-
-        // //	Center align
-        // textTimerSeconds.anchor.set(0.5);
-        // textTimerSeconds.align = 'center';
-
-        // //	Font style
-        // textTimerSeconds.font = 'KrungThep';
-        // textTimerSeconds.fontSize = 72;
-
-        // // Stroke color and thickness
-        // textTimerSeconds.fill = '#FFFFFF';
-
-        // // Colon Colon Colon Colon Colon Colon Colon Colon Colon Colon Colon
-        // var timerNumColon = ':';
-        // const textTimerColon = this.add.text(608, 40, timerNumColon);
-
-        // //	Center align
-        // textTimerColon.anchor.set(0.5);
-        // textTimerColon.align = 'center';
-
-        // //	Font style
-        // textTimerColon.font = 'KrungThep';
-        // textTimerColon.fontSize = 72;
-
-        // // //	Stroke color and thickness
-        // textTimerColon.fill = '#FFFFFF';
-
         // BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS 
 
         //The numbers given in parameters are the indexes of the frames, in this order: OVER, OUT, DOWN
-        var btWin = this.add.button(10, 600, 'winButton', this.winnerFun, this, 1, 0, 2);
-        var btLose = this.add.button(110, 600, 'loseButton', this.loserFun, this, 1, 0, 2);
+        var btWin = this.add.button(10, 600, 'winButton', this.winnerFunction, this, 1, 0, 2);
+        var btLose = this.add.button(110, 600, 'loseButton', this.loserFunction, this, 1, 0, 2);
 
         // points button
-        var btPoints = this.add.button(210, 600, 'pointsButton', this.pointsFun, this, 1, 0, 2);
+        var btPoints = this.add.button(210, 600, 'pointsButton', this.pointsFunction, this, 1, 0, 2);
 
         // resets score back to 12000
         gameObj.gScore = 0;
-        gameObj.gTime = 70;
+        gameObj.gTime = 80;
 
         // NEW TIMER NEW TIMER NEW TIMER NEW TIMER NEW TIMER NEW TIMER NEW TIMER NEW TIMER 
 
         //Add text
-        var timeStr = '01:10';
+        var timeStr = '01:20';
 
         txTime = this.add.text(608, 40, timeStr);
 
@@ -129,7 +88,7 @@ gameObj.Play.prototype = {
         txTime.anchor.set(0.5);
 
         // countdown
-        timerSeconds = 70; // 01:10 = 70 seconds
+        timerSeconds = 80; // 01:10 = 70 seconds
         timerObj = this.game.time.create(false); // creates time object
         // set timer to occur every second
         // first perameter how often do you want it to occur in milaseconds
@@ -138,51 +97,132 @@ gameObj.Play.prototype = {
         // start timer
         timerObj.start();
 
+        txDice = this.add.text(this.world.centerX - 50, 50, 'Dice: 0');
+        txDice.fill = 'black';
+        txDice.fontSize = 30;
+        var btRoll = this.add.button(110, 400, 'rollButton', this.rollFun, this, 1, 0, 2);
+
+        speedNum = 4;
+
+        // load sounds into memory
+        pongObj = this.add.audio('pong');
+        // mp3 files take time to decode
+        // check to make sure they are loaded and decoded
+        soundsLoadedFlag = false;
+        // first perameter arrray
+        // second function called after all sounds are loaded 
+        // third "this"
+
+
+        this.sound.setDecodedCallback([pongObj], this.soundsLoadedFun, this);
+
 
 
     },
-    winnerFun: function () {
+    // 
+    soundsLoadedFun: function () {
+        console.log('soundsLoadedFun called')
+        soundsLoadedFlag = true;
+    },
+
+    // INCLASSCHANGE
+    rollFun: function () {
+        console.log('rollFun called');
+        var diceNum = this.rnd.integerInRange(1, 12);
+        txDice.text = 'Dice: ' + diceNum;
+        if (soundsLoadedFlag == true) {
+            pongObj.play();
+
+        }
+    },
+    winnerFunction: function () {
         console.log('WINNER');
         // jump to Win
         this.state.start('Win');
     },
 
-    loserFun: function () {
+    loserFunction: function () {
         console.log('LOSER!');
         // jump to Lose
         this.state.start('Lose');
     },
-    pointsFun: function () {
-        console.log('pointsFun called');
+    pointsFunction: function () {
+        console.log('pointsFunction called');
         //  must put gameObj. when declaring a global variable
         gameObj.gScore = gameObj.gScore + 10;
-        
+
         txScore.text = gameObj.gScore;
     },
 
+    // Backbone of the timer
     updateTimerFun: function () {
         console.log('updateTimer called');
 
+        // decrements the time by one second
+        // timerSeconds is the raw number of seconds
         timerSeconds = timerSeconds - 1;
 
+        // if the time is greater than or equal to 0. Meaning it has not run out yet
         if (timerSeconds >= 0) {
 
-            var displayMin = Math.floor(timerSeconds / 60);
+            // displays the raw number i.e. timerSeconds in  N:00 format
+            var displayMinutes = Math.floor(timerSeconds / 60);
 
-            if (displayMin < 10) {
-                displayMin = '0' + displayMin;
+            // if the value of the Minutes is less than 10
+            if (displayMinutes < 10) {
+                // add a zero, that way it will look like 0N:00
+                displayMinutes = '0' + displayMinutes;
             }
 
-            var displaySec = timerSeconds % 60;
-            txTime.text = displayMin + ":" + displaySec;
+            // displays the remainder of the raw time divided by 60 i.e the seconds
+            var displaySeconds = timerSeconds % 60;
 
-            if (displaySec < 10) {
-                displaySec = '0' + displaySec;
+            // if there is less than 10 seconds on the seconds half of the timer
+            if (displaySeconds < 10) {
+                // add a zero,
+                // to make it appear as 00:0N instead of 00:N
+                displaySeconds = '0' + displaySeconds;
             }
-            gameObj.gTime = displayMin + ":" + displaySec;
+
+            // text/string representation of the time
+            gameObj.gTime = displayMinutes + ":" + displaySeconds;
+
+            // what the user will see
             txTime.text = gameObj.gTime;
+
+            // if the time runs out
+            // and the score is greater than 100
+            // go to the win screen
+            // by running the winnerFunction function
+        } else if (gameObj.gScore > 100) {
+            this.winnerFunction();
         } else {
-            this.loserFun();
+            this.loserFunction();
         }
+    },
+
+    update: function () {
+        // CORE GAME LOOP
+
+        // left
+        if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            single_character.x -= speedNum;
+            single_character.angle = -15;
+
+            // right
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            single_character.x += speedNum;
+            single_character.angle = 15;
+        } else {
+            single_character.angle = 0;
+        }
+
+    },
+    render: function () {
+        // called after update, apply post render effects
+        // or extra debug overlays
+        // jervis barely uses render
+
     }
+
 };

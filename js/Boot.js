@@ -10,7 +10,7 @@ var gameObj = {
 
 
   gScore: 0,
-  gTime: '01:10'
+  gTime: '01:20'
 };
 
 gameObj.Boot = function (game) {};

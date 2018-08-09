@@ -61,7 +61,10 @@ gameObj.Preloader.prototype = {
 
         // preload points button
         this.load.spritesheet('pointsButton', 'img/btn_points.png', 90, 90);
+
         
+        this.load.spritesheet('rollButton', 'img/btn_roll.png', 90, 90);
+        this.load.audio('pong', 'assets/snd/pong.mp3');
 
     },
     create: function () {
