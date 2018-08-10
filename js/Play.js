@@ -18,12 +18,23 @@ gameObj.Play = function (game) {
     // button sound effect
     var soundsLoadedFlag;
     // all sounds loaded flag
+
+    // navigation variable
+    var cursors;
+
 };
 
 gameObj.Play.prototype = {
     create: function () {
         console.log('State - Play');
+        // Game background color
         this.stage.backgroundColor = '#680000';
+        // //  Set the world (global) gravity
+        this.physics.startSystem(Phaser.Physics.ARCADE);
+
+        this.physics.arcade.gravity.y = 100;
+
+
 
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
         var yellow_spike = this.add.sprite(this.world.centerX, 200, 'yellow_spike');
@@ -34,17 +45,15 @@ gameObj.Play.prototype = {
         // top left is 0,0 bottom right is 1,1
         orange_spike.anchor.setTo(0.5, 0.5);
 
-        var orange_spike = this.add.sprite(this.world.centerX + 200, 400, 'orange_spike');
-        // top left is 0,0 bottom right is 1,1
-        orange_spike.anchor.setTo(0.5, 0.5);
-
         var block = this.add.sprite(this.world.centerX - 300, 400, 'block');
-        // top left is 0,0 bottom right is 1,1
-        orange_spike.anchor.setTo(0.5, 0.5);
 
-        single_character = this.add.sprite(this.world.centerX + 30, (960 - 178), 'single_character');
-        // top left is 0,0 bottom right is 1,1
-        orange_spike.anchor.setTo(0.5, 0.5);
+        single_character = this.add.sprite(this.world.centerX + 30, this.world.centerY, 'single_character');
+        this.physics.enable(single_character, Phaser.Physics.ARCADE);
+        // keeps chracter within the walls of the canvas
+        single_character.body.collideWorldBounds = true;
+        single_character.body.bounce.y = 0.8;
+
+
 
         // SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE SCORE 
         var scoreNum = 0;
@@ -113,9 +122,10 @@ gameObj.Play.prototype = {
         // second function called after all sounds are loaded 
         // third "this"
 
-
         this.sound.setDecodedCallback([pongObj], this.soundsLoadedFun, this);
 
+        // Navigation
+        cursors = this.input.keyboard.createCursorKeys();
 
 
     },
@@ -203,20 +213,41 @@ gameObj.Play.prototype = {
 
     update: function () {
         // CORE GAME LOOP
+        
+                // left
+                if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+                    single_character.x -= speedNum;
+                    // single_character.angle = -15;
+                    single_character.frame = 3;
 
-        // left
-        if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            single_character.x -= speedNum;
-            single_character.angle = -15;
-
-            // right
-        } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            single_character.x += speedNum;
-            single_character.angle = 15;
-        } else {
-            single_character.angle = 0;
-        }
-
+                    // right
+                } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+                    single_character.x += speedNum;
+                    // single_character.angle = 15;
+                    single_character.frame = 5;
+                } else {
+                    single_character.angle = 0;
+                    single_character.frame = 4;
+                }
+       
+    //    if (cursors.left.isDown)
+    //    {
+    //        single_character.body.moveLeft(400);
+    //    }
+    //    else if (cursors.right.isDown)
+    //    {
+    //        single_character.body.moveRight(400);
+    //    }
+   
+    //    if (cursors.up.isDown)
+    //    {
+    //        single_character.body.moveUp(400);
+    //    }
+    //    else if (cursors.down.isDown)
+    //    {
+    //        single_character.body.moveDown(400);
+    //    }
+   
     },
     render: function () {
         // called after update, apply post render effects
