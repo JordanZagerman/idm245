@@ -26,6 +26,8 @@ gameObj.Play = function (game) {
     var sprites;
     var rip = 0;
 
+    var fallRate;
+
 
 };
 
@@ -42,14 +44,16 @@ gameObj.Play.prototype = {
 
 
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
-        var yellow_spike = this.add.sprite(this.world.centerX, 200, 'yellow_spike');
+        var yellow_spike = this.add.sprite();
         // top left is 0,0 bottom right is 1,1
         yellow_spike.anchor.setTo(0.5, 0.5);
 
 
         sprites = this.add.group();
 
-        this.time.events.loop(50, this.createSprite, this);
+        fallRate = 1000;
+
+        this.time.events.loop(fallRate, this.createSprite, this);
 
 
         var orange_spike = this.add.sprite(this.world.centerX + 200, 400, 'orange_spike');
@@ -139,6 +143,7 @@ gameObj.Play.prototype = {
         cursors = this.input.keyboard.createCursorKeys();
 
 
+
     },
     // 
     soundsLoadedFun: function () {
@@ -226,20 +231,91 @@ gameObj.Play.prototype = {
     update: function () {
         // CORE GAME LOOP
 
-        // left
-        if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+        // Horizontal
+
+        // Down Right
+        if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            console.log('down right horizontal');
+            single_character.x += speedNum;
+            single_character.frame = 8;
+
+            // UP Right
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            console.log('up right horizontal');
+            single_character.x += speedNum;
+            single_character.frame = 2;
+
+            // UP Left
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            console.log('up left horizontal');
             single_character.x -= speedNum;
-            // single_character.angle = -15;
+            single_character.frame = 0;
+
+            // Down Left
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            console.log('down left horizontal');
+            single_character.x -= speedNum;
+            single_character.frame = 6;
+
+            // left
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            single_character.x -= speedNum;
             single_character.frame = 3;
 
             // right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             single_character.x += speedNum;
-            // single_character.angle = 15;
             single_character.frame = 5;
+
         } else {
-            single_character.angle = 0;
+            // single_character.angle = 0;
             single_character.frame = 4;
+        }
+
+
+        // Vertical
+
+        // Down Right
+        if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            console.log('down right vertical');
+            single_character.y += speedNum;
+            single_character.frame = 8;
+            // Down Left
+
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            console.log('Down Left vertical');
+            single_character.y += speedNum;
+            single_character.frame = 6;
+
+            // UP Left
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            console.log('up left vertical');
+            single_character.y -= speedNum;
+            single_character.frame = 0;
+
+            // Up Right
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
+            this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            console.log('up right vertical');
+            single_character.y -= speedNum;
+            single_character.frame = 2;
+
+            // UP
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+            single_character.y -= speedNum;
+            single_character.frame = 1;
+
+            // DOWN
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+            single_character.y += speedNum;
+            single_character.frame = 7;
         }
 
         //    if (cursors.left.isDown)
@@ -268,11 +344,11 @@ gameObj.Play.prototype = {
     },
     createSprite: function () {
         var yellow_spike = sprites.create(this.world.randomX, 0, 'yellow_spike');
-    
-        yellow_spike.animations.add('walk');
-    
-        yellow_spike.play('walk', 10, true);
-    
+
+        yellow_spike.animations.add('fall');
+
+        yellow_spike.play('fall', 10, true);
+
     },
     checkSprite: function (sprite) {
 
@@ -284,7 +360,7 @@ gameObj.Play.prototype = {
         } catch (e) {
             console.log(sprite);
         }
-    
+
     },
 
 
@@ -293,7 +369,7 @@ gameObj.Play.prototype = {
         // or extra debug overlays
         // jervis barely uses render
 
-    
+
 
     }
 
