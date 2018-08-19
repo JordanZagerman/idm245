@@ -10,12 +10,55 @@ gameObj.Win.prototype = {
 
         // top left
         var win_character_1 = this.add.sprite(20, 197, 'win_character_1');
+
+        win_character_1.animations.add('swim');
+
+        //  Play the animation at 30fps on a loop
+        win_character_1.animations.play('swim', 30, true);
+
+        //  Bob the win_character_1 up and down with a tween
+        this.add.tween(win_character_1).to({
+            y: 300
+        }, 2000, Phaser.Easing.Bounce.In, true, 0, 1000, true);
+
         // top right
         var win_character_1 = this.add.sprite(566, 197, 'win_character_1');
+
+        win_character_1.animations.add('swim');
+
+        //  Play the animation at 30fps on a loop
+        win_character_1.animations.play('swim', 30, true);
+
+        //  Bob the win_character_1 up and down with a tween
+        this.add.tween(win_character_1).to({
+            y: 300
+        }, 2000, Phaser.Easing.Cubic.Out, true, 0, 1000, true);
+
         // bottom left
         var win_character_1 = this.add.sprite(20, 612, 'win_character_1');
+
+        win_character_1.animations.add('swim');
+
+        //  Play the animation at 30fps on a loop
+        win_character_1.animations.play('swim', 30, true);
+
+        //  Bob the win_character_1 up and down with a tween
+        this.add.tween(win_character_1).to({
+            y: 300
+        }, 2000, Phaser.Easing.Elastic.In, true, 0, 1000, true);
         // bottom right
         var win_character_1 = this.add.sprite(566, 612, 'win_character_1');
+
+        win_character_1.animations.add('swim');
+
+        //  Play the animation at 30fps on a loop
+        win_character_1.animations.play('swim', 30, true);
+
+        //  Bob the win_character_1 up and down with a tween
+        this.add.tween(win_character_1).to({
+            y: 300
+        }, 2000, Phaser.Easing.Elastic.InOut, true, 0, 1000, true);
+
 
         // text
 

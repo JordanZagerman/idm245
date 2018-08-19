@@ -15,6 +15,8 @@ gameObj.Lose.prototype = {
 
         // left
         var dead_character_1 = this.add.sprite(14.57, 115.96, 'dead_character_1');
+
+        // Phaser.Easing.Bounce.Out, 
         // right
         var dead_character_2 = this.add.sprite(487, 607, 'dead_character_2');
 

@@ -24,6 +24,7 @@ gameObj.Preloader.prototype = {
 
         // Spitesheets         // USE THIS. NOT GAME.
 
+
         this.load.spritesheet('playButton', 'img/proceed_button.png', 363, 120);
         this.load.spritesheet('helpButton', 'img/help_button.png', 177, 100);
 

@@ -21,6 +21,11 @@ gameObj.Play = function (game) {
 
     // navigation variable
     var cursors;
+    // fallings pikes 
+
+    var sprites;
+    var rip = 0;
+
 
 };
 
@@ -40,6 +45,12 @@ gameObj.Play.prototype = {
         var yellow_spike = this.add.sprite(this.world.centerX, 200, 'yellow_spike');
         // top left is 0,0 bottom right is 1,1
         yellow_spike.anchor.setTo(0.5, 0.5);
+
+
+        sprites = this.add.group();
+
+        this.time.events.loop(50, this.createSprite, this);
+
 
         var orange_spike = this.add.sprite(this.world.centerX + 200, 400, 'orange_spike');
         // top left is 0,0 bottom right is 1,1
@@ -135,6 +146,7 @@ gameObj.Play.prototype = {
         soundsLoadedFlag = true;
     },
 
+
     // INCLASSCHANGE
     rollFun: function () {
         console.log('rollFun called');
@@ -213,46 +225,75 @@ gameObj.Play.prototype = {
 
     update: function () {
         // CORE GAME LOOP
-        
-                // left
-                if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-                    single_character.x -= speedNum;
-                    // single_character.angle = -15;
-                    single_character.frame = 3;
 
-                    // right
-                } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-                    single_character.x += speedNum;
-                    // single_character.angle = 15;
-                    single_character.frame = 5;
-                } else {
-                    single_character.angle = 0;
-                    single_character.frame = 4;
-                }
-       
-    //    if (cursors.left.isDown)
-    //    {
-    //        single_character.body.moveLeft(400);
-    //    }
-    //    else if (cursors.right.isDown)
-    //    {
-    //        single_character.body.moveRight(400);
-    //    }
-   
-    //    if (cursors.up.isDown)
-    //    {
-    //        single_character.body.moveUp(400);
-    //    }
-    //    else if (cursors.down.isDown)
-    //    {
-    //        single_character.body.moveDown(400);
-    //    }
-   
+        // left
+        if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            single_character.x -= speedNum;
+            // single_character.angle = -15;
+            single_character.frame = 3;
+
+            // right
+        } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            single_character.x += speedNum;
+            // single_character.angle = 15;
+            single_character.frame = 5;
+        } else {
+            single_character.angle = 0;
+            single_character.frame = 4;
+        }
+
+        //    if (cursors.left.isDown)
+        //    {
+        //        single_character.body.moveLeft(400);
+        //    }
+        //    else if (cursors.right.isDown)
+        //    {
+        //        single_character.body.moveRight(400);
+        //    }
+
+        //    if (cursors.up.isDown)
+        //    {
+        //        single_character.body.moveUp(400);
+        //    }
+        //    else if (cursors.down.isDown)
+        //    {
+        //        single_character.body.moveDown(400);
+        //    }
+
+        sprites.setAll('y', 10, true, true, 1);
+
+        sprites.forEach(this.checkSprite, this, true);
+
+
     },
+    createSprite: function () {
+        var yellow_spike = sprites.create(this.world.randomX, 0, 'yellow_spike');
+    
+        yellow_spike.animations.add('walk');
+    
+        yellow_spike.play('walk', 10, true);
+    
+    },
+    checkSprite: function (sprite) {
+
+        try {
+            if (sprite.y > this.height) {
+                rip++;
+                sprites.remove(sprite, true);
+            }
+        } catch (e) {
+            console.log(sprite);
+        }
+    
+    },
+
+
     render: function () {
         // called after update, apply post render effects
         // or extra debug overlays
         // jervis barely uses render
+
+    
 
     }
 
