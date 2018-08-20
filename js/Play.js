@@ -12,6 +12,8 @@ gameObj.Play = function (game) {
 
     var txDice; // Display text dice rolled
     var single_character;
+    var orange_spike;
+    var yellow_spike;
     var speedNum = 4;
     // how many pixels per instance
     var pongObj;
@@ -39,14 +41,25 @@ gameObj.Play.prototype = {
         // //  Set the world (global) gravity
         this.physics.startSystem(Phaser.Physics.ARCADE);
 
+        // this.game.physics.arcade.enable(sprite);
+        // sprite.enableBody = true;
+        // sprite.body.immovable = true;
+
         this.physics.arcade.gravity.y = 100;
 
 
 
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
-        var yellow_spike = this.add.sprite();
+        yellow_spike = this.add.sprite();
         // top left is 0,0 bottom right is 1,1
         yellow_spike.anchor.setTo(0.5, 0.5);
+
+
+        orange_spike = this.add.sprite();
+        // top left is 0,0 bottom right is 1,1
+        orange_spike.anchor.setTo(0.5, 0.5);
+
+        // var block = this.add.sprite();
 
 
         sprites = this.add.group();
@@ -56,13 +69,8 @@ gameObj.Play.prototype = {
         this.time.events.loop(fallRate, this.createSprite, this);
 
 
-        var orange_spike = this.add.sprite(this.world.centerX + 200, 400, 'orange_spike');
-        // top left is 0,0 bottom right is 1,1
-        orange_spike.anchor.setTo(0.5, 0.5);
 
-        var block = this.add.sprite(this.world.centerX - 300, 400, 'block');
-
-        single_character = this.add.sprite(this.world.centerX + 30, this.world.centerY, 'single_character');
+        single_character = this.add.sprite(this.world.centerX + 50, this.world.centerY, 'single_character');
         this.physics.enable(single_character, Phaser.Physics.ARCADE);
         // keeps chracter within the walls of the canvas
         single_character.body.collideWorldBounds = true;
@@ -340,14 +348,32 @@ gameObj.Play.prototype = {
 
         sprites.forEach(this.checkSprite, this, true);
 
+        this.game.physics.arcade.collide(single_character, orange_spike, this.winnerFunction, null, this);
+        this.game.physics.arcade.overlap(single_character, orange_spike, this.winnerFunction, null, this);
 
     },
     createSprite: function () {
-        var yellow_spike = sprites.create(this.world.randomX, 0, 'yellow_spike');
+
+        var yellow_spike = sprites.create(this.world.randomX, -200, 'yellow_spike');
 
         yellow_spike.animations.add('fall');
 
         yellow_spike.play('fall', 10, true);
+
+
+        var orange_spike = sprites.create(this.world.randomX, -200, 'orange_spike');
+
+        orange_spike.animations.add('fall');
+
+        orange_spike.play('fall', 10, true);
+
+        var block = sprites.create(this.world.randomX, -200, 'block');
+
+        block.animations.add('fall');
+
+        block.play('fall', 10, true);
+
+
 
     },
     checkSprite: function (sprite) {
