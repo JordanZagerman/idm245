@@ -14,6 +14,7 @@ gameObj.Play = function (game) {
     var single_character;
     var orange_spike;
     var yellow_spike;
+    var block;
     var speedNum = 4;
     // how many pixels per instance
     var pongObj;
@@ -25,7 +26,6 @@ gameObj.Play = function (game) {
     var cursors;
     // fallings pikes 
 
-    var sprites;
     var rip = 0;
 
     var fallRate;
@@ -48,33 +48,40 @@ gameObj.Play.prototype = {
         this.physics.arcade.gravity.y = 100;
 
 
-
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
-        yellow_spike = this.add.sprite();
+        yellow_spike = this.add.sprite(this.world.centerX, 0, 'yellow_spike');
         // top left is 0,0 bottom right is 1,1
         yellow_spike.anchor.setTo(0.5, 0.5);
+        this.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
+        yellow_spike.name = 'yellow_spike';
+        yellow_spike.body.velocity.y = 200;
 
+        // Orange Spike
 
-        orange_spike = this.add.sprite();
+        orange_spike = this.add.sprite(this.world.centerX + 200, -200, 'orange_spike');
         // top left is 0,0 bottom right is 1,1
         orange_spike.anchor.setTo(0.5, 0.5);
+        this.physics.enable(orange_spike, Phaser.Physics.ARCADE);
+        orange_spike.name = 'orange_spike';
+        orange_spike.body.velocity.y = 100;
 
-        // var block = this.add.sprite();
+        // Red Block
 
+        block = this.add.sprite(this.world.centerX - 200, -200, 'block');
+        block.anchor.setTo(0.5, 0.5);
+        this.physics.enable(block, Phaser.Physics.ARCADE);
+        block.name = 'block';
+        block.body.velocity.y = 100;
+        block.body.collideWorldBounds = true;
 
-        sprites = this.add.group();
-
-        fallRate = 1000;
-
-        this.time.events.loop(fallRate, this.createSprite, this);
-
-
+        
 
         single_character = this.add.sprite(this.world.centerX + 50, this.world.centerY, 'single_character');
         this.physics.enable(single_character, Phaser.Physics.ARCADE);
         // keeps chracter within the walls of the canvas
         single_character.body.collideWorldBounds = true;
         single_character.body.bounce.y = 0.8;
+        single_character.name = 'single_character';
 
 
 
@@ -151,7 +158,71 @@ gameObj.Play.prototype = {
         cursors = this.input.keyboard.createCursorKeys();
 
 
+            // Define constants
+    this.SHOT_DELAY = 200; // milliseconds (10 bullets/second)
+    this.SPIKE_SPEED = 500; // pixels/second
+    this.NUMBER_OF_SPIKES = 3;
 
+
+    // Create an object representing our gun
+    this.gun = this.game.add.sprite(this.game.width/2, 0, 'yellow_spike');
+
+    // Set the pivot point to the center of the gun
+    this.gun.anchor.setTo(0.5, 0.5);
+
+
+
+    // Create an object pool of bullets
+    this.spikePool = this.game.add.group();
+    for(var i = 0; i < this.NUMBER_OF_SPIKES; i++) {
+        // Create each bullet and add it to the group.
+        yellow_spike = this.game.add.sprite(0, 0, 'yellow_spike');
+        this.spikePool.add(yellow_spike);
+
+        // Set its pivot point to the center of the bullet
+        yellow_spike.anchor.setTo(0.5, 0.5);
+
+        // Enable physics on the bullet
+        this.game.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
+
+        // Set its initial state to "dead".
+        yellow_spike.kill();
+    }
+
+    },
+    shootSpike: function() {
+        console.log('SHOT FIRED');
+        // Enforce a short delay between shots by recording
+        // the time that each bullet is shot and testing if
+        // the amount of time since the last shot is more than
+        // the required delay.
+        if (this.lastSpikeShotAt === undefined) this.lastSpikeShotAt = 0;
+        if (this.game.time.now - this.lastSpikeShotAt < this.SHOT_DELAY) return;
+        this.lastSpikeShotAt = this.game.time.now;
+    
+        // Get a dead bullet from the pool
+        yellow_spike = this.spikePool.getFirstDead();
+    
+        // If there aren't any bullets available then don't shoot
+        if (yellow_spike === null || yellow_spike === undefined) return;
+    
+        // Revive the bullet
+        // This makes the bullet "alive"
+        yellow_spike.revive();
+    
+        // Bullets should kill themselves when they leave the world.
+        // Phaser takes care of this for me by setting this flag
+        // but you can do it yourself by killing the bullet if
+        // its x,y coordinates are outside of the world.
+        yellow_spike.checkWorldBounds = true;
+        yellow_spike.outOfBoundsKill = true;
+    
+        // Set the bullet position to the gun position.
+        yellow_spike.reset(this.gun.x, this.gun.y);
+    
+        // Shoot it
+        yellow_spike.body.velocity.y = this.SPIKE_SPEED;
+        yellow_spike.body.velocity.x = 0;
     },
     // 
     soundsLoadedFun: function () {
@@ -239,6 +310,11 @@ gameObj.Play.prototype = {
     update: function () {
         // CORE GAME LOOP
 
+        // Mouse down shoot spike
+        if (this.game.input.activePointer.isDown) {
+            this.shootSpike();
+        }
+
         // Horizontal
 
         // Down Right
@@ -291,14 +367,14 @@ gameObj.Play.prototype = {
         if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
             this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             console.log('down right vertical');
-            single_character.y += speedNum;
+            single_character.y += speedNum * 3;
             single_character.frame = 8;
             // Down Left
 
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
             this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             console.log('Down Left vertical');
-            single_character.y += speedNum;
+            single_character.y += speedNum * 3;
             single_character.frame = 6;
 
             // UP Left
@@ -322,72 +398,22 @@ gameObj.Play.prototype = {
 
             // DOWN
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-            single_character.y += speedNum;
+            single_character.y += speedNum * 3;
             single_character.frame = 7;
         }
 
-        //    if (cursors.left.isDown)
-        //    {
-        //        single_character.body.moveLeft(400);
-        //    }
-        //    else if (cursors.right.isDown)
-        //    {
-        //        single_character.body.moveRight(400);
-        //    }
 
-        //    if (cursors.up.isDown)
-        //    {
-        //        single_character.body.moveUp(400);
-        //    }
-        //    else if (cursors.down.isDown)
-        //    {
-        //        single_character.body.moveDown(400);
-        //    }
-
-        sprites.setAll('y', 10, true, true, 1);
-
-        sprites.forEach(this.checkSprite, this, true);
-
-        this.game.physics.arcade.collide(single_character, orange_spike, this.winnerFunction, null, this);
-        this.game.physics.arcade.overlap(single_character, orange_spike, this.winnerFunction, null, this);
+        this.physics.arcade.collide(single_character, yellow_spike, this.collisionHandler, null, this);
+        this.physics.arcade.collide(single_character, orange_spike, this.collisionHandler, null, this);
+        this.physics.arcade.collide(single_character, block, this.collisionHandler, null, this);
+        // // this.game.physics.arcade.overlap(single_character, orange_spike, this.collisionHandler, null, this);
 
     },
-    createSprite: function () {
+    collisionHandler: function (obj1, obj2) {
+        console.log('Player Hit');
+        this.stage.backgroundColor = '#34df00';
 
-        var yellow_spike = sprites.create(this.world.randomX, -200, 'yellow_spike');
-
-        yellow_spike.animations.add('fall');
-
-        yellow_spike.play('fall', 10, true);
-
-
-        var orange_spike = sprites.create(this.world.randomX, -200, 'orange_spike');
-
-        orange_spike.animations.add('fall');
-
-        orange_spike.play('fall', 10, true);
-
-        var block = sprites.create(this.world.randomX, -200, 'block');
-
-        block.animations.add('fall');
-
-        block.play('fall', 10, true);
-
-
-
-    },
-    checkSprite: function (sprite) {
-
-        try {
-            if (sprite.y > this.height) {
-                rip++;
-                sprites.remove(sprite, true);
-            }
-        } catch (e) {
-            console.log(sprite);
-        }
-
-    },
+    }, 
 
 
     render: function () {
