@@ -15,7 +15,10 @@ gameObj.Play = function (game) {
     var orange_spike;
     var yellow_spike;
     var block;
-    var speedNum = 4;
+    var baseBlock;
+    var single_character_speed = 4;
+
+    var fallingObjectGroup;
     // how many pixels per instance
     var pongObj;
     // button sound effect
@@ -49,7 +52,7 @@ gameObj.Play.prototype = {
 
 
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
-        yellow_spike = this.add.sprite(this.world.centerX, 0, 'yellow_spike');
+        yellow_spike = this.add.sprite(this.world.centerX, 10000, 'yellow_spike');
         // top left is 0,0 bottom right is 1,1
         yellow_spike.anchor.setTo(0.5, 0.5);
         this.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
@@ -73,6 +76,10 @@ gameObj.Play.prototype = {
         block.name = 'block';
         block.body.velocity.y = 100;
         block.body.collideWorldBounds = true;
+
+        baseBlock = this.add.sprite(0, 10, 'baseBlock');
+        this.physics.enable(baseBlock, Phaser.Physics.ARCADE);
+        baseBlock.name = 'baseBlock';
 
         
 
@@ -141,7 +148,7 @@ gameObj.Play.prototype = {
         txDice.fontSize = 30;
         var btRoll = this.add.button(110, 400, 'rollButton', this.rollFun, this, 1, 0, 2);
 
-        speedNum = 4;
+        single_character_speed = 4;
 
         // load sounds into memory
         pongObj = this.add.audio('pong');
@@ -180,7 +187,7 @@ gameObj.Play.prototype = {
         this.spikePool.add(yellow_spike);
 
         // Set its pivot point to the center of the bullet
-        yellow_spike.anchor.setTo(0.5, 0.5);
+        // yellow_spike.anchor.setTo(0.5, 0.5);
 
         // Enable physics on the bullet
         this.game.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
@@ -321,38 +328,38 @@ gameObj.Play.prototype = {
         if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
             this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             console.log('down right horizontal');
-            single_character.x += speedNum;
+            single_character.x += single_character_speed;
             single_character.frame = 8;
 
             // UP Right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
             this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             console.log('up right horizontal');
-            single_character.x += speedNum;
+            single_character.x += single_character_speed;
             single_character.frame = 2;
 
             // UP Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
             this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             console.log('up left horizontal');
-            single_character.x -= speedNum;
+            single_character.x -= single_character_speed;
             single_character.frame = 0;
 
             // Down Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
             this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             console.log('down left horizontal');
-            single_character.x -= speedNum;
+            single_character.x -= single_character_speed;
             single_character.frame = 6;
 
             // left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            single_character.x -= speedNum;
+            single_character.x -= single_character_speed;
             single_character.frame = 3;
 
             // right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            single_character.x += speedNum;
+            single_character.x += single_character_speed;
             single_character.frame = 5;
 
         } else {
@@ -367,51 +374,63 @@ gameObj.Play.prototype = {
         if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
             this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             console.log('down right vertical');
-            single_character.y += speedNum * 3;
+            single_character.y += single_character_speed * 3;
             single_character.frame = 8;
             // Down Left
 
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
             this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             console.log('Down Left vertical');
-            single_character.y += speedNum * 3;
+            single_character.y += single_character_speed * 3;
             single_character.frame = 6;
 
             // UP Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
             this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             console.log('up left vertical');
-            single_character.y -= speedNum;
+            single_character.y -= single_character_speed;
             single_character.frame = 0;
 
             // Up Right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
             this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             console.log('up right vertical');
-            single_character.y -= speedNum;
+            single_character.y -= single_character_speed;
             single_character.frame = 2;
 
             // UP
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-            single_character.y -= speedNum;
+            single_character.y -= single_character_speed;
             single_character.frame = 1;
 
             // DOWN
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-            single_character.y += speedNum * 3;
+            single_character.y += single_character_speed * 3;
             single_character.frame = 7;
         }
 
 
         this.physics.arcade.collide(single_character, yellow_spike, this.collisionHandler, null, this);
         this.physics.arcade.collide(single_character, orange_spike, this.collisionHandler, null, this);
-        this.physics.arcade.collide(single_character, block, this.collisionHandler, null, this);
+        this.physics.arcade.collide(single_character, block, this.collisionHandlerBlock, null, this);
         // // this.game.physics.arcade.overlap(single_character, orange_spike, this.collisionHandler, null, this);
 
     },
     collisionHandler: function (obj1, obj2) {
         console.log('Player Hit');
-        this.stage.backgroundColor = '#34df00';
+        this.stage.backgroundColor = '#773ddd';
+        this.state.start('Lose');
+
+    }, 
+    collisionHandlerBlock: function (obj1, obj2) {
+        console.log('Player Hit');
+
+        // if (){}
+        this.stage.backgroundColor = '#F8F8F8';
+
+        block.body.velocity.x = 100;
+        block.body.collideWorldBounds = false;
+
 
     }, 
 
