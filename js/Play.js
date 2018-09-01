@@ -33,7 +33,6 @@ gameObj.Play = function (game) {
 
     var fallRate;
 
-
 };
 
 gameObj.Play.prototype = {
@@ -52,12 +51,14 @@ gameObj.Play.prototype = {
 
 
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
-        yellow_spike = this.add.sprite(this.world.centerX, 10000, 'yellow_spike');
+        yellow_spike = this.add.group();
+        yellow_spike.createMultiple(5, 'yellow_spike', 0, false);
+
         // top left is 0,0 bottom right is 1,1
-        yellow_spike.anchor.setTo(0.5, 0.5);
+        // yellow_spike.anchor.setTo(0.5, 0.5);
         this.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
-        yellow_spike.name = 'yellow_spike';
-        yellow_spike.body.velocity.y = 200;
+        // yellow_spike.name = 'yellow_spike';
+        // yellow_spike.body.velocity.y = 200;
 
         // Orange Spike
 
@@ -81,7 +82,7 @@ gameObj.Play.prototype = {
         this.physics.enable(baseBlock, Phaser.Physics.ARCADE);
         baseBlock.name = 'baseBlock';
 
-        
+
 
         single_character = this.add.sprite(this.world.centerX + 50, this.world.centerY, 'single_character');
         this.physics.enable(single_character, Phaser.Physics.ARCADE);
@@ -164,74 +165,38 @@ gameObj.Play.prototype = {
         // Navigation
         cursors = this.input.keyboard.createCursorKeys();
 
-
-            // Define constants
-    this.SHOT_DELAY = 200; // milliseconds (10 bullets/second)
-    this.SPIKE_SPEED = 500; // pixels/second
-    this.NUMBER_OF_SPIKES = 3;
-
-
-    // Create an object representing our gun
-    this.gun = this.game.add.sprite(this.game.width/2, 0, 'yellow_spike');
-
-    // Set the pivot point to the center of the gun
-    this.gun.anchor.setTo(0.5, 0.5);
-
-
-
-    // Create an object pool of bullets
-    this.spikePool = this.game.add.group();
-    for(var i = 0; i < this.NUMBER_OF_SPIKES; i++) {
-        // Create each bullet and add it to the group.
-        yellow_spike = this.game.add.sprite(0, 0, 'yellow_spike');
-        this.spikePool.add(yellow_spike);
-
-        // Set its pivot point to the center of the bullet
-        // yellow_spike.anchor.setTo(0.5, 0.5);
-
-        // Enable physics on the bullet
-        this.game.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
-
-        // Set its initial state to "dead".
-        yellow_spike.kill();
-    }
+        // this.physics.arcade.enable(this.world, true);
+        this.time.events.loop(150, this.fire, this);
 
     },
-    shootSpike: function() {
-        console.log('SHOT FIRED');
-        // Enforce a short delay between shots by recording
-        // the time that each bullet is shot and testing if
-        // the amount of time since the last shot is more than
-        // the required delay.
-        if (this.lastSpikeShotAt === undefined) this.lastSpikeShotAt = 0;
-        if (this.game.time.now - this.lastSpikeShotAt < this.SHOT_DELAY) return;
-        this.lastSpikeShotAt = this.game.time.now;
-    
-        // Get a dead bullet from the pool
-        yellow_spike = this.spikePool.getFirstDead();
-    
-        // If there aren't any bullets available then don't shoot
-        if (yellow_spike === null || yellow_spike === undefined) return;
-    
-        // Revive the bullet
-        // This makes the bullet "alive"
-        yellow_spike.revive();
-    
-        // Bullets should kill themselves when they leave the world.
-        // Phaser takes care of this for me by setting this flag
-        // but you can do it yourself by killing the bullet if
-        // its x,y coordinates are outside of the world.
-        yellow_spike.checkWorldBounds = true;
-        yellow_spike.outOfBoundsKill = true;
-    
-        // Set the bullet position to the gun position.
-        yellow_spike.reset(this.gun.x, this.gun.y);
-    
-        // Shoot it
-        yellow_spike.body.velocity.y = this.SPIKE_SPEED;
-        yellow_spike.body.velocity.x = 0;
+
+    fire: function () {
+
+        var fallingSpike = yellow_spike.getFirstExists(false);
+
+        if (fallingSpike) {
+            fallingSpike.frame = this.rnd.integerInRange(0, 6);
+            fallingSpike.exists = true;
+            fallingSpike.reset(this.world.randomX, 0);
+
+            // fallingSpike.body.bounce.y = 0.8;
+        }
+
     },
-    // 
+
+    hitBySpike: function (a, fallingSpike) {
+
+        if (fallingSpike.y > (single_character.y + 5)) {
+            return true;
+        } else {
+            // Lose, Player Hit
+            this.stage.backgroundColor = '#4d2d2d';
+
+            return false;
+        }
+
+    },
+
     soundsLoadedFun: function () {
         console.log('soundsLoadedFun called')
         soundsLoadedFlag = true;
@@ -313,14 +278,17 @@ gameObj.Play.prototype = {
             this.loserFunction();
         }
     },
+     checkBounds: function (fallingSpike) {
+
+        if (fallingSpike.y > 600) {
+            fallingSpike.kill();
+        }
+
+    },
 
     update: function () {
         // CORE GAME LOOP
 
-        // Mouse down shoot spike
-        if (this.game.input.activePointer.isDown) {
-            this.shootSpike();
-        }
 
         // Horizontal
 
@@ -413,7 +381,7 @@ gameObj.Play.prototype = {
         this.physics.arcade.collide(single_character, yellow_spike, this.collisionHandler, null, this);
         this.physics.arcade.collide(single_character, orange_spike, this.collisionHandler, null, this);
         this.physics.arcade.collide(single_character, block, this.collisionHandlerBlock, null, this);
-        // // this.game.physics.arcade.overlap(single_character, orange_spike, this.collisionHandler, null, this);
+        yellow_spike.forEachAlive(this.checkBounds, this);
 
     },
     collisionHandler: function (obj1, obj2) {
@@ -421,7 +389,7 @@ gameObj.Play.prototype = {
         this.stage.backgroundColor = '#773ddd';
         this.state.start('Lose');
 
-    }, 
+    },
     collisionHandlerBlock: function (obj1, obj2) {
         console.log('Player Hit');
 
@@ -432,7 +400,7 @@ gameObj.Play.prototype = {
         block.body.collideWorldBounds = false;
 
 
-    }, 
+    },
 
 
     render: function () {
