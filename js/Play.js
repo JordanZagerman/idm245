@@ -14,9 +14,11 @@ gameObj.Play = function (game) {
     var single_character;
     var orange_spike;
     var yellow_spike;
+
     var block;
     var baseBlock;
-    var single_character_speed = 4;
+
+    var single_character_speed;
 
     var fallingObjectGroup;
     // how many pixels per instance
@@ -27,12 +29,7 @@ gameObj.Play = function (game) {
 
     // navigation variable
     var cursors;
-    // fallings pikes 
-
-    var rip = 0;
-
-    var fallRate;
-
+    // fallings pikes
 };
 
 gameObj.Play.prototype = {
@@ -47,12 +44,12 @@ gameObj.Play.prototype = {
         // sprite.enableBody = true;
         // sprite.body.immovable = true;
 
-        this.physics.arcade.gravity.y = 100;
+        this.physics.arcade.gravity.y = 400;
 
 
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
         yellow_spike = this.add.group();
-        yellow_spike.createMultiple(5, 'yellow_spike', 0, false);
+        yellow_spike.createMultiple(8, 'yellow_spike', 0, false);
 
         // top left is 0,0 bottom right is 1,1
         // yellow_spike.anchor.setTo(0.5, 0.5);
@@ -60,27 +57,29 @@ gameObj.Play.prototype = {
         // yellow_spike.name = 'yellow_spike';
         // yellow_spike.body.velocity.y = 200;
 
-        // Orange Spike
 
-        orange_spike = this.add.sprite(this.world.centerX + 200, -200, 'orange_spike');
-        // top left is 0,0 bottom right is 1,1
-        orange_spike.anchor.setTo(0.5, 0.5);
-        this.physics.enable(orange_spike, Phaser.Physics.ARCADE);
-        orange_spike.name = 'orange_spike';
-        orange_spike.body.velocity.y = 100;
+        // // Orange Spike
+
+        // orange_spike = this.add.sprite(this.world.centerX + 200, -200, 'orange_spike');
+        // // top left is 0,0 bottom right is 1,1
+        // orange_spike.anchor.setTo(0.5, 0.5);
+        // this.physics.enable(orange_spike, Phaser.Physics.ARCADE);
+        // orange_spike.name = 'orange_spike';
+        // orange_spike.body.velocity.y = 100;
+        // orange_spike.body.gravity.y = 50;
 
         // Red Block
 
-        block = this.add.sprite(this.world.centerX - 200, -200, 'block');
-        block.anchor.setTo(0.5, 0.5);
-        this.physics.enable(block, Phaser.Physics.ARCADE);
-        block.name = 'block';
-        block.body.velocity.y = 100;
-        block.body.collideWorldBounds = true;
+        // block = this.add.sprite(this.world.centerX - 200, -200, 'block');
+        // block.anchor.setTo(0.5, 0.5);
+        // this.physics.enable(block, Phaser.Physics.ARCADE);
+        // block.name = 'block';
+        // block.body.velocity.y = 100;
+        // block.body.collideWorldBounds = true;
 
-        baseBlock = this.add.sprite(0, 10, 'baseBlock');
-        this.physics.enable(baseBlock, Phaser.Physics.ARCADE);
-        baseBlock.name = 'baseBlock';
+        // baseBlock = this.add.sprite(0, 10, 'baseBlock');
+        // this.physics.enable(baseBlock, Phaser.Physics.ARCADE);
+        // baseBlock.name = 'baseBlock';
 
 
 
@@ -111,12 +110,12 @@ gameObj.Play.prototype = {
 
         // BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS BUTTONS 
 
-        //The numbers given in parameters are the indexes of the frames, in this order: OVER, OUT, DOWN
-        var btWin = this.add.button(10, 600, 'winButton', this.winnerFunction, this, 1, 0, 2);
-        var btLose = this.add.button(110, 600, 'loseButton', this.loserFunction, this, 1, 0, 2);
+        // //The numbers given in parameters are the indexes of the frames, in this order: OVER, OUT, DOWN
+        // var btWin = this.add.button(10, 600, 'winButton', this.winnerFunction, this, 1, 0, 2);
+        // var btLose = this.add.button(110, 600, 'loseButton', this.loserFunction, this, 1, 0, 2);
 
-        // points button
-        var btPoints = this.add.button(210, 600, 'pointsButton', this.pointsFunction, this, 1, 0, 2);
+        // // points button
+        // var btPoints = this.add.button(210, 600, 'pointsButton', this.pointsFunction, this, 1, 0, 2);
 
         // resets score back to 12000
         gameObj.gScore = 0;
@@ -144,12 +143,12 @@ gameObj.Play.prototype = {
         // start timer
         timerObj.start();
 
-        txDice = this.add.text(this.world.centerX - 50, 50, 'Dice: 0');
-        txDice.fill = 'black';
-        txDice.fontSize = 30;
-        var btRoll = this.add.button(110, 400, 'rollButton', this.rollFun, this, 1, 0, 2);
+        // txDice = this.add.text(this.world.centerX - 50, 50, 'Dice: 0');
+        // txDice.fill = 'black';
+        // txDice.fontSize = 30;
+        // var btRoll = this.add.button(110, 400, 'rollButton', this.rollFun, this, 1, 0, 2);
 
-        single_character_speed = 4;
+        single_character_speed = 6;
 
         // load sounds into memory
         pongObj = this.add.audio('pong');
@@ -166,7 +165,7 @@ gameObj.Play.prototype = {
         cursors = this.input.keyboard.createCursorKeys();
 
         // this.physics.arcade.enable(this.world, true);
-        this.time.events.loop(150, this.fire, this);
+        this.time.events.loop(300, this.fire, this);
 
     },
 
@@ -175,9 +174,9 @@ gameObj.Play.prototype = {
         var fallingSpike = yellow_spike.getFirstExists(false);
 
         if (fallingSpike) {
-            fallingSpike.frame = this.rnd.integerInRange(0, 6);
+            fallingSpike.frame = this.rnd.integerInRange(0, 10);
             fallingSpike.exists = true;
-            fallingSpike.reset(this.world.randomX, 0);
+            fallingSpike.reset(this.world.randomX, -30);
 
             // fallingSpike.body.bounce.y = 0.8;
         }
@@ -203,16 +202,16 @@ gameObj.Play.prototype = {
     },
 
 
-    // INCLASSCHANGE
-    rollFun: function () {
-        console.log('rollFun called');
-        var diceNum = this.rnd.integerInRange(1, 12);
-        txDice.text = 'Dice: ' + diceNum;
-        if (soundsLoadedFlag == true) {
-            pongObj.play();
+    // // INCLASSCHANGE
+    // rollFun: function () {
+    //     console.log('rollFun called');
+    //     var diceNum = this.rnd.integerInRange(1, 12);
+    //     txDice.text = 'Dice: ' + diceNum;
+    //     if (soundsLoadedFlag == true) {
+    //         pongObj.play();
 
-        }
-    },
+    //     }
+    // },
     winnerFunction: function () {
         console.log('WINNER');
         // jump to Win
@@ -280,9 +279,12 @@ gameObj.Play.prototype = {
     },
      checkBounds: function (fallingSpike) {
 
-        if (fallingSpike.y > 600) {
+        if (fallingSpike.y > this.world.height) {
             fallingSpike.kill();
+            gameObj.gScore = gameObj.gScore + 1;
+            txScore.text = gameObj.gScore;
         }
+
 
     },
 
@@ -298,6 +300,7 @@ gameObj.Play.prototype = {
             console.log('down right horizontal');
             single_character.x += single_character_speed;
             single_character.frame = 8;
+            single_character.body.allowGravity = true;
 
             // UP Right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
@@ -305,6 +308,7 @@ gameObj.Play.prototype = {
             console.log('up right horizontal');
             single_character.x += single_character_speed;
             single_character.frame = 2;
+            single_character.body.allowGravity = true;
 
             // UP Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
@@ -312,6 +316,7 @@ gameObj.Play.prototype = {
             console.log('up left horizontal');
             single_character.x -= single_character_speed;
             single_character.frame = 0;
+            single_character.body.allowGravity = true;
 
             // Down Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
@@ -319,20 +324,24 @@ gameObj.Play.prototype = {
             console.log('down left horizontal');
             single_character.x -= single_character_speed;
             single_character.frame = 6;
+            single_character.body.allowGravity = true;
 
             // left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            single_character.x -= single_character_speed;
+            single_character.x -= single_character_speed + 3;
             single_character.frame = 3;
+            single_character.body.allowGravity = true;
 
             // right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            single_character.x += single_character_speed;
+            single_character.x += single_character_speed + 3;
             single_character.frame = 5;
+            single_character.body.allowGravity = true;
 
         } else {
             // single_character.angle = 0;
             single_character.frame = 4;
+            single_character.body.allowGravity = true;
         }
 
 
@@ -344,13 +353,15 @@ gameObj.Play.prototype = {
             console.log('down right vertical');
             single_character.y += single_character_speed * 3;
             single_character.frame = 8;
-            // Down Left
+            single_character.body.allowGravity = true;
 
+            // Down Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
             this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             console.log('Down Left vertical');
             single_character.y += single_character_speed * 3;
             single_character.frame = 6;
+            single_character.body.allowGravity = true;
 
             // UP Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
@@ -358,6 +369,7 @@ gameObj.Play.prototype = {
             console.log('up left vertical');
             single_character.y -= single_character_speed;
             single_character.frame = 0;
+            single_character.body.allowGravity = false;
 
             // Up Right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
@@ -365,23 +377,27 @@ gameObj.Play.prototype = {
             console.log('up right vertical');
             single_character.y -= single_character_speed;
             single_character.frame = 2;
+            single_character.body.allowGravity = false;
 
             // UP
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
             single_character.y -= single_character_speed;
             single_character.frame = 1;
+            single_character.body.allowGravity = false;
 
             // DOWN
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
             single_character.y += single_character_speed * 3;
             single_character.frame = 7;
+            single_character.body.allowGravity = true;
         }
 
 
         this.physics.arcade.collide(single_character, yellow_spike, this.collisionHandler, null, this);
-        this.physics.arcade.collide(single_character, orange_spike, this.collisionHandler, null, this);
-        this.physics.arcade.collide(single_character, block, this.collisionHandlerBlock, null, this);
+        // this.physics.arcade.collide(single_character, orange_spike, this.collisionHandler, null, this);
+        // this.physics.arcade.collide(single_character, block, this.collisionHandlerBlock, null, this);
         yellow_spike.forEachAlive(this.checkBounds, this);
+
 
     },
     collisionHandler: function (obj1, obj2) {
@@ -394,7 +410,9 @@ gameObj.Play.prototype = {
         console.log('Player Hit');
 
         // if (){}
-        this.stage.backgroundColor = '#F8F8F8';
+        // this.stage.backgroundColor = '#F8F8F8';
+
+        timerSeconds = timerSeconds - 20;
 
         block.body.velocity.x = 100;
         block.body.collideWorldBounds = false;
