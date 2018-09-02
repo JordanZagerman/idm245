@@ -11,17 +11,18 @@ gameObj.Play = function (game) {
     var timerSeconds; // Current countdown timer
 
     var txDice; // Display text dice rolled
-    var single_character;
-    var orange_spike;
-    var yellow_spike;
+    var single_character; // main character
+    var orange_spike; // more dangerous spikes, that should split into two yellow spikes
+    var yellow_spike; // normal dangerous spikes
 
-    var block;
-    var baseBlock;
+    var block; // semi harmless, only does damage when character is smushed
+    var baseBlock; // might need this to contain the block inside the canvas, because worldbounds will likely be off
+    var timer_down; // Power Up that takes some time off of the timer, and likely gives a score boost
 
-    var single_character_speed;
+    // var floatingCircle;
 
-    var fallingObjectGroup;
-    // how many pixels per instance
+    var single_character_speed; // speed of the main character's movements
+
     var pongObj;
     // button sound effect
     var soundsLoadedFlag;
@@ -89,6 +90,18 @@ gameObj.Play.prototype = {
         single_character.body.collideWorldBounds = true;
         single_character.body.bounce.y = 0.8;
         single_character.name = 'single_character';
+
+        timer_down = this.add.sprite(1700, 320, 'timer_down');
+        timer_down.name = 'timer_down';
+        this.physics.enable(timer_down, Phaser.Physics.ARCADE);
+        timer_down.body.velocity.x = -200;
+        timer_down.body.allowGravity = false;
+
+        timer_down = this.add.sprite(-2700, 30, 'timer_down');
+        timer_down.name = 'timer_down';
+        this.physics.enable(timer_down, Phaser.Physics.ARCADE);
+        timer_down.body.velocity.x = 200;
+        timer_down.body.allowGravity = false;
 
 
 
@@ -166,6 +179,7 @@ gameObj.Play.prototype = {
 
         // this.physics.arcade.enable(this.world, true);
         this.time.events.loop(300, this.fire, this);
+        // this.time.events.loop(300, this.fireCirlces, this);
 
     },
 
@@ -176,25 +190,49 @@ gameObj.Play.prototype = {
         if (fallingSpike) {
             fallingSpike.frame = this.rnd.integerInRange(0, 10);
             fallingSpike.exists = true;
-            fallingSpike.reset(this.world.randomX, -30);
-
-            // fallingSpike.body.bounce.y = 0.8;
+            fallingSpike.reset(this.world.randomX, -200);
         }
+
 
     },
 
-    hitBySpike: function (a, fallingSpike) {
+    // fireCirlces: function () {
 
-        if (fallingSpike.y > (single_character.y + 5)) {
-            return true;
-        } else {
-            // Lose, Player Hit
-            this.stage.backgroundColor = '#4d2d2d';
 
-            return false;
-        }
+    //     var floatingCircle = timer_down.getFirstExists(false);
 
-    },
+    //     if (floatingCircle) {
+    //         floatingCircle.frame = this.rnd.integerInRange(0, 10);
+    //         floatingCircle.exists = true;
+    //         floatingCircle.reset(200,this.world.randomY);
+    //     }
+
+    // },
+
+    // hitBySpike: function (a, fallingSpike) {
+
+    //     if (fallingSpike.y > (single_character.y - 50)) {
+    //         return true;
+    //     } else {
+    //         // Lose, Player Hit
+    //         this.stage.backgroundColor = '#4d2d2d';
+
+    //         return false;
+    //     }
+
+    // },
+    // hitByBall: function (a, floatingCircle) {
+
+    //     if (floatingCircle.x > (single_character.x)) {
+    //         return true;
+    //     } else {
+    //         // Lose, Player Hit
+    //         this.stage.backgroundColor = '#FFF';
+
+    //         return false;
+    //     }
+
+    // },
 
     soundsLoadedFun: function () {
         console.log('soundsLoadedFun called')
@@ -271,13 +309,11 @@ gameObj.Play.prototype = {
             // and the score is greater than 100
             // go to the win screen
             // by running the winnerFunction function
-        } else if (gameObj.gScore > 100) {
-            this.winnerFunction();
         } else {
-            this.loserFunction();
+            this.winnerFunction();
         }
     },
-     checkBounds: function (fallingSpike) {
+    checkBounds: function (fallingSpike) {
 
         if (fallingSpike.y > this.world.height) {
             fallingSpike.kill();
@@ -396,13 +432,14 @@ gameObj.Play.prototype = {
         this.physics.arcade.collide(single_character, yellow_spike, this.collisionHandler, null, this);
         // this.physics.arcade.collide(single_character, orange_spike, this.collisionHandler, null, this);
         // this.physics.arcade.collide(single_character, block, this.collisionHandlerBlock, null, this);
+        this.physics.arcade.collide(single_character, timer_down, this.collisionHandlerTimerDownPowerUp, null, this);
         yellow_spike.forEachAlive(this.checkBounds, this);
+        // timer_down.forEachAlive(this.checkBoundsTimerDown, this);
 
 
     },
     collisionHandler: function (obj1, obj2) {
         console.log('Player Hit');
-        this.stage.backgroundColor = '#773ddd';
         this.state.start('Lose');
 
     },
@@ -418,6 +455,14 @@ gameObj.Play.prototype = {
         block.body.collideWorldBounds = false;
 
 
+    },
+    collisionHandlerTimerDownPowerUp: function (obj1, obj2) {
+        console.log('collisionHandlerTimerDownPowerUp Called');
+
+        this.stage.backgroundColor = '#00052B';
+        gameObj.gScore = gameObj.gScore + 15;
+        txScore.text = gameObj.gScore;
+        timer_down.kill();
     },
 
 

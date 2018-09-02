@@ -41,6 +41,9 @@ gameObj.Preloader.prototype = {
         this.load.image('yellow_spike', 'img/yellow_spike.png');
         this.load.image('orange_spike', 'img/orange_spike.png');
         this.load.image('block', 'img/block.png');
+        this.load.image('timer_up', 'img/timer_up.png');
+        this.load.image('timer_down', 'img/timer_down.png');
+        
         this.load.spritesheet('single_character', 'img/single_character.png', 93, 175);
 
 
