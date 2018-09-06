@@ -23,7 +23,7 @@ gameObj.Play = function (game) {
 
     var single_character_speed; // speed of the main character's movements
 
-    var pongObj;
+    var knifeObj;
     // button sound effect
     var soundsLoadedFlag;
     // all sounds loaded flag
@@ -164,7 +164,7 @@ gameObj.Play.prototype = {
         single_character_speed = 6;
 
         // load sounds into memory
-        pongObj = this.add.audio('pong');
+        knifeObj = this.add.audio('death');
         // mp3 files take time to decode
         // check to make sure they are loaded and decoded
         soundsLoadedFlag = false;
@@ -172,7 +172,7 @@ gameObj.Play.prototype = {
         // second function called after all sounds are loaded 
         // third "this"
 
-        this.sound.setDecodedCallback([pongObj], this.soundsLoadedFun, this);
+        this.sound.setDecodedCallback([knifeObj], this.soundsLoadedFun, this);
 
         // Navigation
         cursors = this.input.keyboard.createCursorKeys();
@@ -188,7 +188,7 @@ gameObj.Play.prototype = {
         var fallingSpike = yellow_spike.getFirstExists(false);
 
         if (fallingSpike) {
-            fallingSpike.frame = this.rnd.integerInRange(0, 10);
+            fallingSpike.frame = this.rnd.integerInRange(0, 1);
             fallingSpike.exists = true;
             fallingSpike.reset(this.world.randomX, -200);
         }
@@ -246,7 +246,7 @@ gameObj.Play.prototype = {
     //     var diceNum = this.rnd.integerInRange(1, 12);
     //     txDice.text = 'Dice: ' + diceNum;
     //     if (soundsLoadedFlag == true) {
-    //         pongObj.play();
+    //         knifeObj.play();
 
     //     }
     // },
@@ -440,6 +440,7 @@ gameObj.Play.prototype = {
     },
     collisionHandler: function (obj1, obj2) {
         console.log('Player Hit');
+        knifeObj.play();
         this.state.start('Lose');
 
     },

@@ -69,7 +69,8 @@ gameObj.Preloader.prototype = {
 
         
         this.load.spritesheet('rollButton', 'img/btn_roll.png', 90, 90);
-        this.load.audio('pong', 'assets/snd/pong.mp3');
+        this.load.audio('death', 'assets/snd/pong.mp3');
+        // this.load.audio('death', 'assets/snd/death.mp3');
 
     },
     create: function () {
