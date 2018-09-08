@@ -28,10 +28,6 @@ gameObj.Preloader.prototype = {
         this.load.spritesheet('playButton', 'img/proceed_button.png', 363, 120);
         this.load.spritesheet('helpButton', 'img/help_button.png', 177, 100);
 
-        // Load temp buttons
-        this.load.spritesheet('winButton', 'img/btn_win.png', 90, 90);
-        this.load.spritesheet('loseButton', 'img/btn_lose.png', 90, 90);
-
         // Images        // USE THIS. NOT GAME.
 
         // Help Images
@@ -64,13 +60,20 @@ gameObj.Preloader.prototype = {
         this.preloadBar = this.add.sprite((820 - 158) / 2, (700 - 50) / 2, 'preloaderBar');
         this.load.setPreloadSprite(this.preloadBar);
 
-        // preload points button
-        this.load.spritesheet('pointsButton', 'img/btn_points.png', 90, 90);
-
-        
-        this.load.spritesheet('rollButton', 'img/btn_roll.png', 90, 90);
+        // Audio
         this.load.audio('death', 'assets/snd/pong.mp3');
-        // this.load.audio('death', 'assets/snd/death.mp3');
+        this.load.audio('point', 'assets/snd/point.mp3');
+        this.load.audio('left', 'assets/snd/left.mp3');
+        this.load.audio('right', 'assets/snd/right.mp3');
+        this.load.audio('down_right', 'assets/snd/down_right.mp3');
+        this.load.audio('down_left', 'assets/snd/down_left.mp3');
+        this.load.audio('up_left', 'assets/snd/up_left.mp3');
+        this.load.audio('up_right', 'assets/snd/up_right.mp3');
+        this.load.audio('up', 'assets/snd/up.mp3');
+        this.load.audio('down', 'assets/snd/down.mp3');
+        this.load.audio('flight', 'assets/snd/flight.mp3');
+        this.load.audio('screams', 'assets/snd/screams.mp3');
+        this.load.audio('shining', 'assets/snd/shining.mp3');
 
     },
     create: function () {

@@ -146,5 +146,6 @@ gameObj.Win.prototype = {
     winPlayAgainOnClick: function () {
         console.log('play again win screen button clicked');
         this.state.start('Play');
+        shiningSound.pause();
     }
 };

@@ -24,13 +24,26 @@ gameObj.Play = function (game) {
     var single_character_speed; // speed of the main character's movements
 
     var knifeObj;
-    // button sound effect
+    var pointSound;
+    var screamSound;
+    var leftSound;
+    var rightSound;
+    var upSound;
+    var downSound;
+    var downLeftSound;
+    var downRightSound;
+    var upLeftSound;
+    var upRightSound;
+    var shiningSound;
+
+    // sound effect
     var soundsLoadedFlag;
     // all sounds loaded flag
 
     // navigation variable
     var cursors;
     // fallings pikes
+    var fallingTimer;
 };
 
 gameObj.Play.prototype = {
@@ -51,36 +64,14 @@ gameObj.Play.prototype = {
         //this.world.centerX/Y is an equation that automatically does the anchor point centering equations
         yellow_spike = this.add.group();
         yellow_spike.createMultiple(8, 'yellow_spike', 0, false);
-
-        // top left is 0,0 bottom right is 1,1
-        // yellow_spike.anchor.setTo(0.5, 0.5);
         this.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
-        // yellow_spike.name = 'yellow_spike';
-        // yellow_spike.body.velocity.y = 200;
+
+        timer_down = this.add.group();
+        timer_down.createMultiple(1, 'timer_down', 0, false);
+        timer_down.name = 'timer_down';
+        this.physics.enable(timer_down, Phaser.Physics.ARCADE);
 
 
-        // // Orange Spike
-
-        // orange_spike = this.add.sprite(this.world.centerX + 200, -200, 'orange_spike');
-        // // top left is 0,0 bottom right is 1,1
-        // orange_spike.anchor.setTo(0.5, 0.5);
-        // this.physics.enable(orange_spike, Phaser.Physics.ARCADE);
-        // orange_spike.name = 'orange_spike';
-        // orange_spike.body.velocity.y = 100;
-        // orange_spike.body.gravity.y = 50;
-
-        // Red Block
-
-        // block = this.add.sprite(this.world.centerX - 200, -200, 'block');
-        // block.anchor.setTo(0.5, 0.5);
-        // this.physics.enable(block, Phaser.Physics.ARCADE);
-        // block.name = 'block';
-        // block.body.velocity.y = 100;
-        // block.body.collideWorldBounds = true;
-
-        // baseBlock = this.add.sprite(0, 10, 'baseBlock');
-        // this.physics.enable(baseBlock, Phaser.Physics.ARCADE);
-        // baseBlock.name = 'baseBlock';
 
 
 
@@ -91,17 +82,15 @@ gameObj.Play.prototype = {
         single_character.body.bounce.y = 0.8;
         single_character.name = 'single_character';
 
-        timer_down = this.add.sprite(1700, 320, 'timer_down');
-        timer_down.name = 'timer_down';
-        this.physics.enable(timer_down, Phaser.Physics.ARCADE);
-        timer_down.body.velocity.x = -200;
-        timer_down.body.allowGravity = false;
 
-        timer_down = this.add.sprite(-2700, 30, 'timer_down');
-        timer_down.name = 'timer_down';
-        this.physics.enable(timer_down, Phaser.Physics.ARCADE);
-        timer_down.body.velocity.x = 200;
-        timer_down.body.allowGravity = false;
+        // timer_down.body.velocity.x = -200;
+        // timer_down.body.allowGravity = false;
+
+        // timer_down = this.add.sprite(-2700, 30, 'timer_down');
+        // timer_down.name = 'timer_down';
+        // this.physics.enable(timer_down, Phaser.Physics.ARCADE);
+        // timer_down.body.velocity.x = 200;
+        // timer_down.body.allowGravity = false;
 
 
 
@@ -156,15 +145,22 @@ gameObj.Play.prototype = {
         // start timer
         timerObj.start();
 
-        // txDice = this.add.text(this.world.centerX - 50, 50, 'Dice: 0');
-        // txDice.fill = 'black';
-        // txDice.fontSize = 30;
-        // var btRoll = this.add.button(110, 400, 'rollButton', this.rollFun, this, 1, 0, 2);
-
         single_character_speed = 6;
 
         // load sounds into memory
         knifeObj = this.add.audio('death');
+        shiningSound = this.add.audio('shining');
+        pointSound = this.add.audio('point');
+        screamSound = this.add.audio('screams');
+        leftSound = this.add.audio('left');
+        rightSound = this.add.audio('right');
+        upSound = this.add.audio('up');
+        downSound = this.add.audio('down');
+        downLeftSound  = this.add.audio('down_left');
+        downRightSound = this.add.audio('down_right');
+        upLeftSound = this.add.audio('up_left');
+        upRightSound  = this.add.audio('up_right');
+    
         // mp3 files take time to decode
         // check to make sure they are loaded and decoded
         soundsLoadedFlag = false;
@@ -179,6 +175,7 @@ gameObj.Play.prototype = {
 
         // this.physics.arcade.enable(this.world, true);
         this.time.events.loop(300, this.fire, this);
+        this.time.events.loop(300, this.fireTimerDown, this);
         // this.time.events.loop(300, this.fireCirlces, this);
 
     },
@@ -188,51 +185,24 @@ gameObj.Play.prototype = {
         var fallingSpike = yellow_spike.getFirstExists(false);
 
         if (fallingSpike) {
-            fallingSpike.frame = this.rnd.integerInRange(0, 1);
             fallingSpike.exists = true;
             fallingSpike.reset(this.world.randomX, -200);
         }
 
 
     },
+    fireTimerDown: function () {
 
-    // fireCirlces: function () {
+        fallingTimer = timer_down.getFirstExists(false);
+
+        if (fallingTimer) {
+            fallingTimer.exists = true;
+            fallingTimer.reset(this.world.randomX, -400);
+        } 
+
+    },
 
 
-    //     var floatingCircle = timer_down.getFirstExists(false);
-
-    //     if (floatingCircle) {
-    //         floatingCircle.frame = this.rnd.integerInRange(0, 10);
-    //         floatingCircle.exists = true;
-    //         floatingCircle.reset(200,this.world.randomY);
-    //     }
-
-    // },
-
-    // hitBySpike: function (a, fallingSpike) {
-
-    //     if (fallingSpike.y > (single_character.y - 50)) {
-    //         return true;
-    //     } else {
-    //         // Lose, Player Hit
-    //         this.stage.backgroundColor = '#4d2d2d';
-
-    //         return false;
-    //     }
-
-    // },
-    // hitByBall: function (a, floatingCircle) {
-
-    //     if (floatingCircle.x > (single_character.x)) {
-    //         return true;
-    //     } else {
-    //         // Lose, Player Hit
-    //         this.stage.backgroundColor = '#FFF';
-
-    //         return false;
-    //     }
-
-    // },
 
     soundsLoadedFun: function () {
         console.log('soundsLoadedFun called')
@@ -240,26 +210,18 @@ gameObj.Play.prototype = {
     },
 
 
-    // // INCLASSCHANGE
-    // rollFun: function () {
-    //     console.log('rollFun called');
-    //     var diceNum = this.rnd.integerInRange(1, 12);
-    //     txDice.text = 'Dice: ' + diceNum;
-    //     if (soundsLoadedFlag == true) {
-    //         knifeObj.play();
-
-    //     }
-    // },
     winnerFunction: function () {
         console.log('WINNER');
         // jump to Win
         this.state.start('Win');
+        shiningSound.play();
     },
 
     loserFunction: function () {
         console.log('LOSER!');
         // jump to Lose
         this.state.start('Lose');
+        screamSound.play();
     },
     pointsFunction: function () {
         console.log('pointsFunction called');
@@ -319,9 +281,36 @@ gameObj.Play.prototype = {
             fallingSpike.kill();
             gameObj.gScore = gameObj.gScore + 1;
             txScore.text = gameObj.gScore;
+            pointSound.play();
         }
 
 
+    },
+    checkBoundsTimer: function (fallingTimer) {
+
+        if (fallingTimer.y > this.world.height) {
+            fallingTimer.kill();
+        } 
+
+
+    },
+
+    collisionHandler: function (obj1, obj2) {
+        console.log('Player Hit');
+        knifeObj.play();
+        this.loserFunction();
+
+    },
+    collisionHandlerTimerDownPowerUp: function (obj1, obj2) {
+        console.log('collisionHandlerTimerDownPowerUp Called');
+
+        this.stage.backgroundColor = '#00052B';
+        gameObj.gScore = gameObj.gScore + 15;
+        txScore.text = gameObj.gScore;
+        timer_down.kill();
+
+        
+        
     },
 
     update: function () {
@@ -367,13 +356,15 @@ gameObj.Play.prototype = {
             single_character.x -= single_character_speed + 3;
             single_character.frame = 3;
             single_character.body.allowGravity = true;
-
+            leftSound.play();
+            
             // right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             single_character.x += single_character_speed + 3;
             single_character.frame = 5;
             single_character.body.allowGravity = true;
-
+            rightSound.play();
+            
         } else {
             // single_character.angle = 0;
             single_character.frame = 4;
@@ -390,6 +381,7 @@ gameObj.Play.prototype = {
             single_character.y += single_character_speed * 3;
             single_character.frame = 8;
             single_character.body.allowGravity = true;
+            downRightSound.play();
 
             // Down Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN) &&
@@ -398,6 +390,8 @@ gameObj.Play.prototype = {
             single_character.y += single_character_speed * 3;
             single_character.frame = 6;
             single_character.body.allowGravity = true;
+            downLeftSound.play();
+
 
             // UP Left
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
@@ -406,6 +400,7 @@ gameObj.Play.prototype = {
             single_character.y -= single_character_speed;
             single_character.frame = 0;
             single_character.body.allowGravity = false;
+            upLeftSound.play();
 
             // Up Right
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP) &&
@@ -414,56 +409,31 @@ gameObj.Play.prototype = {
             single_character.y -= single_character_speed;
             single_character.frame = 2;
             single_character.body.allowGravity = false;
+            upRightSound.play();
 
             // UP
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
             single_character.y -= single_character_speed;
             single_character.frame = 1;
             single_character.body.allowGravity = false;
+            upSound.play();
 
             // DOWN
         } else if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
             single_character.y += single_character_speed * 3;
             single_character.frame = 7;
             single_character.body.allowGravity = true;
+            downSound.play();
         }
 
 
         this.physics.arcade.collide(single_character, yellow_spike, this.collisionHandler, null, this);
-        // this.physics.arcade.collide(single_character, orange_spike, this.collisionHandler, null, this);
-        // this.physics.arcade.collide(single_character, block, this.collisionHandlerBlock, null, this);
         this.physics.arcade.collide(single_character, timer_down, this.collisionHandlerTimerDownPowerUp, null, this);
         yellow_spike.forEachAlive(this.checkBounds, this);
+        timer_down.forEachAlive(this.checkBoundsTimer, this);
         // timer_down.forEachAlive(this.checkBoundsTimerDown, this);
 
 
-    },
-    collisionHandler: function (obj1, obj2) {
-        console.log('Player Hit');
-        knifeObj.play();
-        this.state.start('Lose');
-
-    },
-    collisionHandlerBlock: function (obj1, obj2) {
-        console.log('Player Hit');
-
-        // if (){}
-        // this.stage.backgroundColor = '#F8F8F8';
-
-        timerSeconds = timerSeconds - 20;
-
-        block.body.velocity.x = 100;
-        block.body.collideWorldBounds = false;
-
-
-    },
-    collisionHandlerTimerDownPowerUp: function (obj1, obj2) {
-        console.log('collisionHandlerTimerDownPowerUp Called');
-
-        this.stage.backgroundColor = '#00052B';
-        gameObj.gScore = gameObj.gScore + 15;
-        txScore.text = gameObj.gScore;
-        timer_down.kill();
     },
 
 

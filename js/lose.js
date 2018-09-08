@@ -83,6 +83,7 @@ gameObj.Lose.prototype = {
     },
     losePlayAgainOnClick: function () {
         console.log('play again lose screen button clicked');
+        screamSound.pause();
         this.state.start('Play');
     }
 };
