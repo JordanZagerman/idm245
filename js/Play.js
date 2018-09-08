@@ -67,7 +67,7 @@ gameObj.Play.prototype = {
         this.physics.enable(yellow_spike, Phaser.Physics.ARCADE);
 
         timer_down = this.add.group();
-        timer_down.createMultiple(1, 'timer_down', 0, false);
+        timer_down.createMultiple(10, 'timer_down', 0, false);
         timer_down.name = 'timer_down';
         this.physics.enable(timer_down, Phaser.Physics.ARCADE);
 
@@ -290,7 +290,9 @@ gameObj.Play.prototype = {
 
         if (fallingTimer.y > this.world.height) {
             fallingTimer.kill();
-        } 
+        } else {
+            fallingTimer.reset(this.world.randomX, -400);
+        }
 
 
     },
